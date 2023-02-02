@@ -16,5 +16,15 @@ namespace Five_testing
         {
             InitializeComponent();
         }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            //загружаем авторизацию
+            Login login = new Login();
+            if (login.ShowDialog() == DialogResult.OK)
+                MessageBox.Show("Вы вошли");
+            else
+                this.Close();
+        }
     }
 }
