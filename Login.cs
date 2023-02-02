@@ -32,7 +32,7 @@ namespace Five_testing
             Graphics g = e.Graphics;
             Brush b = new LinearGradientBrush(new Rectangle(00, 150, 500, 150), Color.DarkRed, Color.White, LinearGradientMode.Horizontal);
             Pen p = new Pen(b, 4);
-            g.DrawLine(p, new Point(40, 170), new Point(500, 170));
+            g.DrawLine(p, new Point(40, 140), new Point(500, 140));
         }
 
         //кнопка Отмена
