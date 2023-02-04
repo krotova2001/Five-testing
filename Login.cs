@@ -26,7 +26,7 @@ namespace Five_testing
 
         }
 
-        //линия
+        //красивая линия
         private void Login_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
@@ -46,7 +46,7 @@ namespace Five_testing
         private void button1_Click(object sender, EventArgs e)
         {
             Login_validater  L = new Login_validater();
-            if (L.Login("1", "2")&&textBox1.Text.Length>0&&textBox2.Text.Length>0)
+            if (L.Login(textBox1.Text, textBox2.Text)&&textBox1.Text.Length>0&&textBox2.Text.Length>0)
                 this.DialogResult = DialogResult.OK;
             else
                 label4.Text = "Неверный логин или пароль";

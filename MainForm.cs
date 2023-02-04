@@ -21,9 +21,7 @@ namespace Five_testing
         {
             //загружаем авторизацию
             Login login = new Login();
-            if (login.ShowDialog() == DialogResult.OK)
-                MessageBox.Show("Вы вошли");
-            else
+            if (login.ShowDialog() == DialogResult.Cancel)
                 this.Close();
         }
     }
