@@ -12,6 +12,7 @@ namespace Five_testing
 {
     public partial class MainForm : Form
     {
+        public User current_user; // текущий пользователь
         public MainForm()
         {
             InitializeComponent();
