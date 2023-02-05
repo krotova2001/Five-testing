@@ -127,7 +127,6 @@
             this.Name = "Login";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Авторизация";
-            this.Load += new System.EventHandler(this.Login_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.Login_Paint);
             this.ResumeLayout(false);
             this.PerformLayout();

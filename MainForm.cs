@@ -24,6 +24,8 @@ namespace Five_testing
             Login login = new Login();
             if (login.ShowDialog() == DialogResult.Cancel)
                 this.Close();
+            current_user = login.Fill_user(); // передаем текущего пользователя
+            //this.Text += $" - {current_user.Name} {current_user.Surname}";
         }
     }
 }

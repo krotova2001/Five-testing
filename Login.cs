@@ -16,14 +16,19 @@ namespace Five_testing
     /// </summary>
     public partial class Login : Form
     {
+        User cur_user; // временное хранение текущего пользователя, чтоб потом передать главной форме
         public Login()
         {
             InitializeComponent();
         }
 
-        private void Login_Load(object sender, EventArgs e)
+        /// <summary>
+        /// передача авторизированного пользователя
+        /// </summary>
+        /// <returns></returns>
+        internal User Fill_user()
         {
-
+            return cur_user;
         }
 
         //красивая линия
@@ -46,8 +51,8 @@ namespace Five_testing
         private void button1_Click(object sender, EventArgs e)
         {
             Login_validater  L = new Login_validater();
-            User user = L.Login(textBox1.Text, textBox2.Text);
-            if (user != null&&textBox1.Text.Length>0&&textBox2.Text.Length>0)
+            cur_user = L.Login(textBox1.Text, textBox2.Text);
+            if (cur_user != null&&textBox1.Text.Length>0&&textBox2.Text.Length>0)
                 this.DialogResult = DialogResult.OK;
             else
                 label4.Text = "Неверный логин или пароль";
