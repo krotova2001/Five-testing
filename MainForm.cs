@@ -25,7 +25,13 @@ namespace Five_testing
             if (login.ShowDialog() == DialogResult.Cancel)
                 this.Close();
             current_user = login.Fill_user(); // передаем текущего пользователя
-            //this.Text += $" - {current_user.Name} {current_user.Surname}";
+            
+            //сокрытие лишних вкладок
+            if (current_user.IsPrepod == false)
+                tabControl1.TabPages.Remove(tabPage2);
+            if (current_user.IsAdmin == false)
+                tabControl1.TabPages.Remove(tabPage3);
+
         }
     }
 }
