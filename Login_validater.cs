@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Data.SqlClient;
+using MySql.Data.MySqlClient;
 using System.Configuration;
 
 namespace Five_testing
@@ -21,23 +21,23 @@ namespace Five_testing
         /// <returns>Новый объект User</returns>
         internal User Login(string username, string pass)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["MyMicrosoftSql"].ConnectionString;
+            string connectionString = ConfigurationManager.ConnectionStrings["MySQL"].ConnectionString;
             // Создание подключения
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
-                SqlCommand command = new SqlCommand($@"SELECT * from Users WHERE username = '{username}' and password = '{pass}'", connection);
+                MySqlCommand command = new MySqlCommand($@"SELECT * from users WHERE username = '{username}' and password = '{pass}'", connection);
                 connection.Open();
-                SqlDataReader sqldatareader = command.ExecuteReader();
+                MySqlDataReader sqldatareader = command.ExecuteReader();
                 if (sqldatareader.HasRows)
                 {
                     User user = new User();
                     while (sqldatareader.Read())
                     {
                         user.Id = sqldatareader.GetInt32(0);
-                        user.Name = sqldatareader.GetString(3);
-                        user.Surname = sqldatareader.GetString(4);
-                        user.IsStuden = sqldatareader.GetBoolean(6);
-                        user.IsPrepod = sqldatareader.GetBoolean(7);
+                        user.Name = sqldatareader.GetString(4);
+                        user.Surname = sqldatareader.GetString(5);
+                        user.IsStuden = sqldatareader.GetBoolean(7);
+                        user.IsPrepod = sqldatareader.GetBoolean(6);
                         user.IsAdmin = sqldatareader.GetBoolean(8);
                     }
                     sqldatareader.Close();
