@@ -10,6 +10,7 @@ using System.Windows.Forms;
 
 namespace Five_testing
 {
+    //главное окно программы
     public partial class MainForm : Form
     {
         public User current_user; // текущий пользователь
@@ -26,11 +27,23 @@ namespace Five_testing
                 this.Close();
             current_user = login.Fill_user(); // передаем текущего пользователя
             
-            //сокрытие лишних вкладок
+            //сокрытие лишних вкладок в зависимости от роли пользователя
             if (current_user.IsPrepod == false)
                 tabControl1.TabPages.Remove(tabPage2);
             if (current_user.IsAdmin == false)
                 tabControl1.TabPages.Remove(tabPage3);
+
+        }
+
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        //обновить список пользователей
+        private void Refresh_user_list()
+        {
 
         }
     }

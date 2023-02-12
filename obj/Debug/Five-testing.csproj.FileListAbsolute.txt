@@ -10,8 +10,6 @@ C:\Users\zvuk2\Source\Repos\krotova2001\Five-testing\obj\Debug\Five-testing.cspr
 C:\Users\zvuk2\Source\Repos\krotova2001\Five-testing\obj\Debug\Five-testing.csproj.CoreCompileInputs.cache
 C:\Users\zvuk2\Source\Repos\krotova2001\Five-testing\obj\Debug\Five-testing.exe
 C:\Users\zvuk2\Source\Repos\krotova2001\Five-testing\obj\Debug\Five-testing.pdb
-C:\Users\zvuk2\Source\Repos\krotova2001\Five-testing\bin\Debug\System.Data.SqlClient.dll
-C:\Users\zvuk2\Source\Repos\krotova2001\Five-testing\bin\Debug\System.Data.SqlClient.xml
 C:\Users\zvuk2\Source\Repos\krotova2001\Five-testing\obj\Debug\Five-testing.csproj.CopyComplete
 C:\Users\zvuk2\Source\Repos\krotova2001\Five-testing\bin\Debug\MySql.Data.dll
 C:\Users\zvuk2\Source\Repos\krotova2001\Five-testing\bin\Debug\MySql.Data.xml
