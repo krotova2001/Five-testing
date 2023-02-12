@@ -34,11 +34,11 @@ namespace Five_testing
                     while (sqldatareader.Read())
                     {
                         user.Id = sqldatareader.GetInt32(0);
-                        user.Name = sqldatareader.GetString(4);
-                        user.Surname = sqldatareader.GetString(5);
-                        user.IsStuden = sqldatareader.GetBoolean(7);
-                        user.IsPrepod = sqldatareader.GetBoolean(6);
-                        user.IsAdmin = sqldatareader.GetBoolean(8);
+                        user.name = sqldatareader.GetString(4);
+                        user.surname = sqldatareader.GetString(5);
+                        user.is_student = sqldatareader.GetBoolean(7);
+                        user.is_prepod = sqldatareader.GetBoolean(6);
+                        user.is_admin = sqldatareader.GetBoolean(8);
                     }
                     sqldatareader.Close();
                     return user;
