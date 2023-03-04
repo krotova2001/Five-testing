@@ -16,9 +16,10 @@ namespace Five_testing
     //главное окно программы
     public partial class MainForm : Form
     {
-        string connectionString = ConfigurationManager.ConnectionStrings["MySQL"].ConnectionString;
+        readonly string connectionString = ConfigurationManager.ConnectionStrings["MySQL"].ConnectionString;
         public User current_user; // текущий пользователь
         List <User> all_users; // все пользователи системы (заполняется только если Админ запросил)
+        List <Group> Groups; // все группы студентов
         public MainForm()
         {
             InitializeComponent();
@@ -43,13 +44,14 @@ namespace Five_testing
         }
 #region Вкладка Администрирование
 
-        //обновить список пользователей
+        //обновить список пользователей, групп
         private void Refresh_user_list()
         {
             //пользуем Dapper
             using (IDbConnection db = new MySqlConnection(connectionString))
             {
                 all_users = db.Query<User>("SELECT * FROM users").ToList();
+                Groups = db.Query<Group>("SELECT * FROM five_test_debug.groups").ToList();
                 treeView1.Nodes.Clear();
                 treeView1.Nodes.Add("Ученики");
                 treeView1.Nodes.Add("Преподаватели");
@@ -63,6 +65,12 @@ namespace Five_testing
                     if (u.is_admin == true)
                         treeView1.Nodes[2].Nodes.Add(new TreeNode(u.ToString()));
                 }
+                
+                foreach (Group g in Groups)
+                {
+                    comboBox2.Items.Add(g.ToString());
+                }
+                
             }
         }
 
@@ -86,10 +94,11 @@ namespace Five_testing
                 {
                     try
                     {
-                        using (IDbConnection db = new MySqlConnection(connectionString))
+                        using (MySqlConnection db = new MySqlConnection(connectionString))
                         {
                             db.Open();
                             MySqlCommand Command = new MySqlCommand($"DELETE FROM users WHERE id = {id_to_del}");
+                            Command.Connection = db;
                             DialogResult result = MessageBox.Show("Внимание! Отменить это действие будет невозможно!", "Удаление Пользователя", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
                             if (result == DialogResult.OK)
                                 Command.BeginExecuteNonQuery();
@@ -134,7 +143,7 @@ namespace Five_testing
             textBox2.PasswordChar = '*';
         }
 
-        #endregion
+       
 
         private void treeView1_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
@@ -143,6 +152,7 @@ namespace Five_testing
 
         private void treeView1_Click(object sender, EventArgs e)
         {
+            //выбор пользователя в дереве
             User temp = null;
             if (treeView1.SelectedNode != null)
             {
@@ -153,10 +163,34 @@ namespace Five_testing
                 {
                     textBox1.Enabled = true;
                     textBox2.Enabled = true;
+                    textBox3.Enabled = true;
+                    textBox4.Enabled = true;
+                    textBox5.Enabled = true;
+                    textBox6.Enabled = true;
                     textBox1.Text = temp.username;
                     textBox2.Text = temp.password;
+                    textBox3.Text = temp.phone;
+                    textBox4.Text = temp.email;
+                    textBox5.Text = temp.name; 
+                    textBox6.Text = temp.surname;
+                    if (temp.age > 0)
+                    {
+                        numericUpDown1.Enabled = true;
+                        numericUpDown1.Value = Convert.ToDecimal(temp.age);
+                    }
+                    if (temp.group_id !=0)
+                    {
+                        foreach (Group group in Groups)
+                        {
+                            if (group.idgroup == temp.group_id)
+                                temp.group = group;
+                        }
+                        comboBox2.Enabled = true;
+                        comboBox2.SelectedItem = temp.group.Name;
+                    }
                 }
             }
         }
-    }
+#endregion
 }
+    } 

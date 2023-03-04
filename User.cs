@@ -22,7 +22,9 @@ namespace Five_testing
         public bool is_admin { get; set; }
         public DateTime create_time { get; set; }
         public int? age { get; set; } // возраст
-        public string group_id { get; set; } // группа обучения
+        public int? group_id { get; set; } // группа обучения
+        public string phone { get; set; } // телефон
+        public Group group { get; set; } = null;
 
         public override string ToString()
         {
