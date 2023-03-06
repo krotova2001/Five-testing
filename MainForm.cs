@@ -191,6 +191,15 @@ namespace Five_testing
                 }
             }
         }
-#endregion
-}
-    } 
+       
+        //редактирование групп
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Groups_editing groups_Editing = new Groups_editing(connectionString);
+            groups_Editing.ShowDialog();
+        }
+
+
+        #endregion
+    }
+} 

@@ -15,3 +15,4 @@ C:\Users\zvuk2\Source\Repos\krotova2001\Five-testing\bin\Debug\MySql.Data.dll
 C:\Users\zvuk2\Source\Repos\krotova2001\Five-testing\bin\Debug\MySql.Data.xml
 C:\Users\zvuk2\Source\Repos\krotova2001\Five-testing\bin\Debug\Dapper.dll
 C:\Users\zvuk2\Source\Repos\krotova2001\Five-testing\bin\Debug\Dapper.xml
+C:\Users\zvuk2\Source\Repos\krotova2001\Five-testing\obj\Debug\Five_testing.Groups_editing.resources
