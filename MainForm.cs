@@ -66,11 +66,11 @@ namespace Five_testing
                         treeView1.Nodes[2].Nodes.Add(new TreeNode(u.ToString()));
                 }
                 
+                comboBox2.Items.Clear();
                 foreach (Group g in Groups)
                 {
                     comboBox2.Items.Add(g.ToString());
                 }
-                
             }
         }
 
@@ -124,6 +124,28 @@ namespace Five_testing
         //кнопка Новый пользователь
         private void button3_Click(object sender, EventArgs e)
         {
+            User u = new User();
+            u.username = textBox1.Text;
+            u.password = textBox2.Text; 
+            u.email = textBox4.Text;
+            u.phone = textBox3.Text;
+            u.age = Convert.ToInt32(numericUpDown1.Value);
+            u.name = textBox5.Text;
+            u.surname = textBox6.Text;
+            if (comboBox1.Text == "Ученик")
+                u.is_student = true;
+            if (comboBox1.Text == "Преподаватель")
+                u.is_prepod = true;
+            if (textBox2.Text == "Администратор")
+                u.is_admin = true;
+           
+            foreach (Group g in Groups)
+            {
+                if (g.Name == comboBox2.Text)
+                u.group_id = g.idgroup;
+            }
+            if ()
+
 
         }
 
@@ -197,6 +219,7 @@ namespace Five_testing
         {
             Groups_editing groups_Editing = new Groups_editing(connectionString);
             groups_Editing.ShowDialog();
+            Refresh_user_list();
         }
 
 
