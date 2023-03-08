@@ -118,7 +118,64 @@ namespace Five_testing
         //кнопка сохранить изменения
         private void button2_Click(object sender, EventArgs e)
         {
-
+            if (treeView1.SelectedNode !=null)
+            {
+                {
+                    int id_to_del = 0;
+                    bool admin = false;
+                    bool prepod = false;
+                    bool student = true;
+                    int group_id=0;
+                    foreach (User u in all_users)
+                        if (u.ToString() == treeView1.SelectedNode.Text)
+                        {
+                            id_to_del = u.Id;
+                        }
+                    if (comboBox1.SelectedIndex == 0)
+                    {
+                        student = true;
+                        prepod = false;
+                        admin = false;
+                    }
+                    if (comboBox1.SelectedIndex == 1)
+                    {
+                        prepod = true;
+                        student = false;
+                        admin=false;
+                    }
+                    if (comboBox1.SelectedIndex == 2)
+                    {
+                        admin = true;
+                        student=false;
+                        prepod=false;
+                    }
+                    foreach (Group g in Groups)
+                    {
+                        if (g.Name == comboBox2.Text)
+                            group_id = g.idgroup;
+                    }
+                    if (id_to_del != 0)
+                    {
+                        try
+                        {
+                            using (MySqlConnection db = new MySqlConnection(connectionString))
+                            {
+                                db.Open();
+                                MySqlCommand Command = new MySqlCommand($"UPDATE five_test_debug.users SET name = '{textBox5.Text}', surname = '{textBox6.Text}', username = '{textBox1.Text}', password='{textBox2.Text}', email='{textBox4.Text}', telephone = '{textBox3.Text}', age = {Convert.ToInt32(numericUpDown1.Value)}, is_prepod={prepod}, is_student={student}, is_admin={admin}, group_id={group_id} WHERE id = {id_to_del}");
+                                Command.Connection = db;
+                                Command.ExecuteNonQuery();
+                                Refresh_user_list();
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message);
+                        }
+                    }
+                    else
+                        MessageBox.Show("Не могу внести изменения");
+                }
+            }
         }
 
         //кнопка Новый пользователь
