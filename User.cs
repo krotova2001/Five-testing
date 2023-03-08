@@ -30,5 +30,13 @@ namespace Five_testing
         {
             return name + " " + surname;
         }
+
+        public User() 
+        { 
+            is_admin = false;
+            is_prepod = false;
+            is_student = true;
+        }
+        
     }
 }

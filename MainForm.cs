@@ -101,7 +101,7 @@ namespace Five_testing
                             Command.Connection = db;
                             DialogResult result = MessageBox.Show("Внимание! Отменить это действие будет невозможно!", "Удаление Пользователя", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
                             if (result == DialogResult.OK)
-                                Command.BeginExecuteNonQuery();
+                                Command.ExecuteNonQuery();
                             Refresh_user_list();
                         }
                     }
@@ -125,6 +125,7 @@ namespace Five_testing
         private void button3_Click(object sender, EventArgs e)
         {
             User u = new User();
+            comboBox1.Enabled = true;
             u.username = textBox1.Text;
             u.password = textBox2.Text; 
             u.email = textBox4.Text;
@@ -132,11 +133,11 @@ namespace Five_testing
             u.age = Convert.ToInt32(numericUpDown1.Value);
             u.name = textBox5.Text;
             u.surname = textBox6.Text;
-            if (comboBox1.Text == "Ученик")
+            if (comboBox1.SelectedIndex == 0)
                 u.is_student = true;
-            if (comboBox1.Text == "Преподаватель")
+            if (comboBox1.SelectedIndex == 1)
                 u.is_prepod = true;
-            if (textBox2.Text == "Администратор")
+            if (comboBox1.SelectedIndex == 2)
                 u.is_admin = true;
            
             foreach (Group g in Groups)
@@ -144,9 +145,19 @@ namespace Five_testing
                 if (g.Name == comboBox2.Text)
                 u.group_id = g.idgroup;
             }
-            if ()
-
-
+            if (textBox1.Text.Length > 0 && textBox2.Text.Length > 0 && textBox5.Text.Length > 0 && textBox6.Text.Length > 0)
+            {
+                using(MySqlConnection db = new MySqlConnection(connectionString))
+                {
+                    db.Open();
+                    MySqlCommand Command = new MySqlCommand($"INSERT INTO five_test_debug.users (username, password, email, name, surname, is_prepod, is_student, is_admin, age, telephone, group_id) VALUES ('{u.username}', '{u.password}', '{u.email}', '{u.name}', '{u.surname}', {u.is_prepod}, {u.is_student}, {u.is_admin}, {u.age}, '{u.phone}', {u.group_id})");
+                    Command.Connection = db;
+                    Command.ExecuteNonQuery();
+                    Refresh_user_list();
+                }
+            }
+            else
+                MessageBox.Show("Не все обязательные поля заполнены");
         }
 
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
@@ -189,6 +200,7 @@ namespace Five_testing
                     textBox4.Enabled = true;
                     textBox5.Enabled = true;
                     textBox6.Enabled = true;
+                    comboBox1.Enabled = true;
                     textBox1.Text = temp.username;
                     textBox2.Text = temp.password;
                     textBox3.Text = temp.phone;
@@ -210,6 +222,12 @@ namespace Five_testing
                         comboBox2.Enabled = true;
                         comboBox2.SelectedItem = temp.group.Name;
                     }
+                    if(temp.is_student==true)
+                        comboBox1.SelectedIndex = 0;
+                    if (temp.is_prepod == true)
+                        comboBox1.SelectedIndex = 1;
+                    if (temp.is_admin == true)
+                        comboBox1.SelectedIndex = 2;
                 }
             }
         }
