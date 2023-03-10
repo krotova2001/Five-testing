@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 using System.Configuration;
 using Dapper;
+using System.Drawing.Text;
 
 namespace Five_testing
 {
@@ -295,5 +296,13 @@ namespace Five_testing
 
 
         #endregion
+
+        //пробуем настройки графики
+        private void MainForm_Paint(object sender, PaintEventArgs e)
+        {
+            Graphics formGraphics = e.Graphics;
+            formGraphics.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
+            formGraphics.TextContrast = 0;
+        }
     }
 } 
