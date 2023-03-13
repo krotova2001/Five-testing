@@ -67,12 +67,16 @@ namespace Five_testing
         {
             using (IDbConnection db = new MySqlConnection(connectionString))
             {
-                all_tests = db.Query<Test>("SELECT * FROM five_test_debug.test join info on test.idtest = info.test_id;").ToList();
                 listBox1.Items.Clear();
-
+                all_tests = db.Query<Test>("SELECT * FROM five_test_debug.test join info on test.idtest = info.test_id;").ToList();
                 foreach (Test test in all_tests)
+                {
                     listBox1.Items.Add(test);
-
+                    test.questions = db.Query<Question>($@"SELECT * FROM test_set join questions on test_set.id_question = questions.idquestion 
+                                                        join question_theme on question_theme.idtheme = questions.id_question_theme
+                                                        WHERE test_set.idtest = {test.idtest}").ToList();
+                    
+                }
             }
         }
 
@@ -86,12 +90,23 @@ namespace Five_testing
                 textBox7.Text = current_test.info;
                 textBox8.Text = current_test.text;
                 textBox9.Text = current_test.date.ToShortDateString();
+                listBox2.Items.Clear();
+                foreach (Question question in current_test.questions)
+                {
+                    listBox2.Items.Add(question);
+                }
             }
         }
 
-
-
-
+        //выбор вопроса у выбранного теста
+        private void listBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (current_test != null && listBox2.SelectedItem != null)
+            {
+                Question q = listBox2.SelectedItem as Question;
+                textBox10.Text = q.text;
+            }
+        }
 
 
 
