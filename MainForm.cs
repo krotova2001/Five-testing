@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 using System.Configuration;
 using Dapper;
+using System.Drawing.Text;
 
 namespace Five_testing
 {
@@ -71,6 +72,7 @@ namespace Five_testing
                 {
                     comboBox2.Items.Add(g.ToString());
                 }
+                Clear_Fields_amd();
             }
         }
 
@@ -81,10 +83,21 @@ namespace Five_testing
                 Refresh_user_list();
         }
 
+        //очистить поля в админке
+        private void Clear_Fields_amd()
+        {
+            textBox1.Clear();
+            textBox2.Clear();
+            textBox3.Clear();
+            textBox4.Clear();
+            textBox5.Clear();
+            textBox6.Clear();
+        }
+
         //кнопка Удалить пользователя
         private void button4_Click(object sender, EventArgs e)
         {
-            if (treeView1.SelectedNode != null)
+            if (treeView1.SelectedNode!=null)
             {
                 int id_to_del=0;
                 foreach (User u in all_users)
@@ -217,9 +230,49 @@ namespace Five_testing
                 MessageBox.Show("Не все обязательные поля заполнены");
         }
 
+        //выбор пользователя в дереве
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
-           
+            
+            User temp = null;
+            if (treeView1.SelectedNode.Nodes.Count == 0)
+            {
+                foreach (User u in all_users)
+                    if (u.ToString() == treeView1.SelectedNode.Text)
+                        temp = u;
+                if (temp != null)
+                {
+                    textBox1.Text = temp.username;
+                    textBox2.Text = temp.password;
+                    textBox3.Text = temp.phone;
+                    textBox4.Text = temp.email;
+                    textBox5.Text = temp.name;
+                    textBox6.Text = temp.surname;
+                    if (temp.age > 0)
+                    {
+                        numericUpDown1.Enabled = true;
+                        numericUpDown1.Value = Convert.ToDecimal(temp.age);
+                    }
+                    if (temp.group_id != 0)
+                    {
+                        foreach (Group group in Groups)
+                        {
+                            if (group.idgroup == temp.group_id)
+                                temp.group = group;
+                        }
+                        comboBox2.Enabled = true;
+                        comboBox2.SelectedItem = temp.group.Name;
+                    }
+                    if (temp.is_student == true)
+                        comboBox1.SelectedIndex = 0;
+                    if (temp.is_prepod == true)
+                        comboBox1.SelectedIndex = 1;
+                    if (temp.is_admin == true)
+                        comboBox1.SelectedIndex = 2;
+                }
+            }
+            else
+                Clear_Fields_amd();
         }
         
 
@@ -233,62 +286,6 @@ namespace Five_testing
             textBox2.PasswordChar = '*';
         }
 
-       
-
-        private void treeView1_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
-        {
-            
-        }
-
-        private void treeView1_Click(object sender, EventArgs e)
-        {
-            //выбор пользователя в дереве
-            User temp = null;
-            if (treeView1.SelectedNode != null)
-            {
-                foreach (User u in all_users)
-                    if (u.ToString() == treeView1.SelectedNode.Text)
-                        temp = u;
-                if (temp != null)
-                {
-                    textBox1.Enabled = true;
-                    textBox2.Enabled = true;
-                    textBox3.Enabled = true;
-                    textBox4.Enabled = true;
-                    textBox5.Enabled = true;
-                    textBox6.Enabled = true;
-                    comboBox1.Enabled = true;
-                    textBox1.Text = temp.username;
-                    textBox2.Text = temp.password;
-                    textBox3.Text = temp.phone;
-                    textBox4.Text = temp.email;
-                    textBox5.Text = temp.name; 
-                    textBox6.Text = temp.surname;
-                    if (temp.age > 0)
-                    {
-                        numericUpDown1.Enabled = true;
-                        numericUpDown1.Value = Convert.ToDecimal(temp.age);
-                    }
-                    if (temp.group_id !=0)
-                    {
-                        foreach (Group group in Groups)
-                        {
-                            if (group.idgroup == temp.group_id)
-                                temp.group = group;
-                        }
-                        comboBox2.Enabled = true;
-                        comboBox2.SelectedItem = temp.group.Name;
-                    }
-                    if(temp.is_student==true)
-                        comboBox1.SelectedIndex = 0;
-                    if (temp.is_prepod == true)
-                        comboBox1.SelectedIndex = 1;
-                    if (temp.is_admin == true)
-                        comboBox1.SelectedIndex = 2;
-                }
-            }
-        }
-       
         //редактирование групп
         private void button1_Click(object sender, EventArgs e)
         {
@@ -299,5 +296,13 @@ namespace Five_testing
 
 
         #endregion
+
+        //пробуем настройки графики
+        private void MainForm_Paint(object sender, PaintEventArgs e)
+        {
+            Graphics formGraphics = e.Graphics;
+            formGraphics.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
+            formGraphics.TextContrast = 0;
+        }
     }
 } 
