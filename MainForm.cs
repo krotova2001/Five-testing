@@ -21,6 +21,8 @@ namespace Five_testing
         public User current_user; // текущий пользователь
         List <User> all_users; // все пользователи системы (заполняется только если Админ запросил)
         List <Group> Groups; // все группы студентов
+        List<Test> all_tests; // пакет всех тестов
+        public Test current_test;
         public MainForm()
         {
             InitializeComponent();
@@ -43,7 +45,61 @@ namespace Five_testing
             if (current_user.is_prepod == true)
                 tabControl1.TabPages.Remove(tabPage3);
         }
-#region Вкладка Администрирование
+
+        //выбор вкладки
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (tabControl1.SelectedIndex == 2) // вкладка Администрирование
+                Refresh_user_list();
+            if (tabControl1.SelectedIndex == 1) // вкладка Редактирование тестов
+                Refresh_test_list();
+            if (tabControl1.SelectedIndex == 0) // вкладка Тестирование
+            {
+
+            }
+        }
+
+        #region Вкладка Редактирование тестов
+        /// <summary>
+        /// обновление списка тестов
+        /// </summary>
+        private void Refresh_test_list()
+        {
+            using (IDbConnection db = new MySqlConnection(connectionString))
+            {
+                all_tests = db.Query<Test>("SELECT * FROM five_test_debug.test join info on test.idtest = info.test_id;").ToList();
+                listBox1.Items.Clear();
+
+                foreach (Test test in all_tests)
+                    listBox1.Items.Add(test);
+
+            }
+        }
+
+        //выбор теста в редактировании
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            current_test = null;
+            if (listBox1.SelectedItems != null)
+            {
+                current_test = listBox1.SelectedItem as Test;
+                textBox7.Text = current_test.info;
+                textBox8.Text = current_test.text;
+                textBox9.Text = current_test.date.ToShortDateString();
+            }
+        }
+
+
+
+
+
+
+
+
+        #endregion
+
+
+        #region Вкладка Администрирование
 
         //обновить список пользователей, групп
         private void Refresh_user_list()
@@ -76,12 +132,7 @@ namespace Five_testing
             }
         }
 
-        //выбор вкладки
-        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (tabControl1.SelectedIndex == 2) // вкладка Администрирование
-                Refresh_user_list();
-        }
+       
 
         //очистить поля в админке
         private void Clear_Fields_amd()
@@ -204,11 +255,25 @@ namespace Five_testing
             u.name = textBox5.Text;
             u.surname = textBox6.Text;
             if (comboBox1.SelectedIndex == 0)
+            {
                 u.is_student = true;
+                u.is_prepod = false;
+                u.is_admin = false;
+            }
+               
             if (comboBox1.SelectedIndex == 1)
+            {
                 u.is_prepod = true;
+                u.is_admin = false;
+                u.is_student = false;
+            }
+                
             if (comboBox1.SelectedIndex == 2)
+            {
                 u.is_admin = true;
+                u.is_student = false;
+                u.is_prepod = false;
+            }
            
             foreach (Group g in Groups)
             {
@@ -304,5 +369,7 @@ namespace Five_testing
             formGraphics.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
             formGraphics.TextContrast = 0;
         }
+
+        
     }
 } 
