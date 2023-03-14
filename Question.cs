@@ -19,13 +19,27 @@ namespace Five_testing
         public string video_ref { get; set; } // ссылка на видео
         public int level { get; set; } // уровень вопроса
         public string theme { get; set; } // тема вопроса
-        public User author { get; set; } // автор
+        public User author { get; set; } // автор вопроса
         public int? correct_answer_id { get; set; }// идентификатор правильного ответа
+        public List<Answer> Answers { get; set; }// набор ответов
 
         public override string ToString()
         {
             return theme + " - " + level + " ур.";
         }
 
+        /// <summary>
+        /// дать правильный ответ
+        /// </summary>
+        /// <returns></returns>
+        public Answer Get_correct_ans()
+        {
+            foreach (Answer answer in Answers)
+            {
+                if (correct_answer_id.HasValue && correct_answer_id==answer.Idanswers)
+                    return answer;
+            }
+            return null;
+        }
     }
 }

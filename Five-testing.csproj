@@ -60,6 +60,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Answer.cs" />
     <Compile Include="Group.cs" />
     <Compile Include="Groups_editing.cs">
       <SubType>Form</SubType>

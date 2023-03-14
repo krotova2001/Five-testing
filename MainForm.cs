@@ -75,7 +75,10 @@ namespace Five_testing
                     test.questions = db.Query<Question>($@"SELECT * FROM test_set join questions on test_set.id_question = questions.idquestion 
                                                         join question_theme on question_theme.idtheme = questions.id_question_theme
                                                         WHERE test_set.idtest = {test.idtest}").ToList();
-                    
+                    foreach (Question question in test.questions)
+                    {
+                        question.Answers = db.Query<Answer>($"SELECT * FROM five_test_debug.answers WHERE question_id = {question.idquestion};").ToList();
+                    }
                 }
             }
         }
@@ -104,11 +107,47 @@ namespace Five_testing
             if (current_test != null && listBox2.SelectedItem != null)
             {
                 Question q = listBox2.SelectedItem as Question;
-                textBox10.Text = q.text;
+                textBox11.Text = q.text;
+                richTextBox1.Clear();
+                foreach (Answer answer in q.Answers)
+                {
+                    if (q.correct_answer_id == answer.Idanswers)
+                    {
+                        richTextBox1.SelectionFont = new Font(richTextBox1.Font, FontStyle.Bold);
+                        richTextBox1.AppendText($"{answer.Text}\n");
+                        richTextBox1.SelectionFont = new Font(richTextBox1.Font, FontStyle.Regular);
+                    }
+                    else
+                    {
+                        richTextBox1.Text += $"{answer.Text}\n";
+                    }
+                }
             }
         }
 
+        //удалить тест
+        private void button7_Click(object sender, EventArgs e)
+        {
 
+        }
+
+        //экспорт теста
+        private void button8_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        //создать новый тест
+        private void button6_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        //редактировать тест
+        private void button5_Click(object sender, EventArgs e)
+        {
+
+        }
 
 
         #endregion
@@ -385,6 +424,6 @@ namespace Five_testing
             formGraphics.TextContrast = 0;
         }
 
-        
+       
     }
 } 
