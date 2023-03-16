@@ -113,8 +113,9 @@ namespace Five_testing
                 {
                     if (q.correct_answer_id == answer.Idanswers)
                     {
+                        //жирный текст не работает...
                         richTextBox1.SelectionFont = new Font(richTextBox1.Font, FontStyle.Bold);
-                        richTextBox1.AppendText($"{answer.Text}\n");
+                        richTextBox1.Text += ($"{answer.Text} - correct\n");
                         richTextBox1.SelectionFont = new Font(richTextBox1.Font, FontStyle.Regular);
                     }
                     else
@@ -140,15 +141,20 @@ namespace Five_testing
         //создать новый тест
         private void button6_Click(object sender, EventArgs e)
         {
-
+            Test t = new Test();
+            Test_editing test_Editing = new Test_editing(t);
+            test_Editing.ShowDialog();
         }
 
         //редактировать тест
         private void button5_Click(object sender, EventArgs e)
         {
-
+            if (current_test != null)
+            {
+                Test_editing test_Editing = new Test_editing(current_test);
+                test_Editing.ShowDialog();
+            }
         }
-
 
         #endregion
 
@@ -424,6 +430,10 @@ namespace Five_testing
             formGraphics.TextContrast = 0;
         }
 
-       
+        //двойной щелчок на выбранном тесте
+        private void listBox1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            button5_Click(sender, e);
+        }
     }
 } 

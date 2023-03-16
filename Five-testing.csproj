@@ -85,6 +85,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Question.cs" />
     <Compile Include="Test.cs" />
+    <Compile Include="Test_editing.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Test_editing.Designer.cs">
+      <DependentUpon>Test_editing.cs</DependentUpon>
+    </Compile>
     <Compile Include="User.cs" />
     <EmbeddedResource Include="Groups_editing.resx">
       <DependentUpon>Groups_editing.cs</DependentUpon>
@@ -104,6 +110,10 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Test_editing.resx">
+      <DependentUpon>Test_editing.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="App.config" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -114,9 +124,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
