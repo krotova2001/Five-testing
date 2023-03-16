@@ -141,7 +141,7 @@ namespace Five_testing
         //создать новый тест
         private void button6_Click(object sender, EventArgs e)
         {
-            Test t = new Test();
+            Test t = new Test(current_user);
             Test_editing test_Editing = new Test_editing(t);
             test_Editing.ShowDialog();
         }

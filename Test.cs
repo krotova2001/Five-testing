@@ -29,6 +29,12 @@ namespace Five_testing
         public Test()
         {
             questions = new List<Question>();
+            date = DateTime.Now;
+        }
+
+        public Test (User user):this()
+        {
+            author = user;
         }
 
         public IEnumerator<Question> GetEnumerator()

@@ -7,29 +7,35 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Media;
+using System.IO;
 
 namespace Five_testing
 {
     /// <summary>
-    /// Класс для редактирования отельного теста
+    /// Класс для редактирования или создания нового отдельного теста 
     /// </summary>
     public partial class Test_editing : Form
     {
         public Test temp_test; //временный тест для редактирования
         public Question temp_question; // временный вопрос для редактиврования
         public Answer temp_answer; // временный ответ для редактирования
-        
+        SoundPlayer soundPlayer;
+
+        //создание нового
         public Test_editing()
         {
             InitializeComponent();
             temp_test = new Test();
         }
 
+        //редактирование существующего
         public Test_editing(Test t)
         {
             InitializeComponent();
             temp_test = t;
             Refresh_questions();
+            
         }
 
         //оновить список вопросов
@@ -61,8 +67,11 @@ namespace Five_testing
                 temp_question = (Question)listBox1.SelectedItem;
                 richTextBox1.Text = temp_question.text;
                 listBox2.Items.Clear();
+                numericUpDown1.Value = temp_question.level;
                 foreach (Answer a in temp_question.Answers)
                     listBox2.Items.Add(a);
+                
+               
             }
         }
 
@@ -101,8 +110,7 @@ namespace Five_testing
             {
                 temp_answer = listBox2.SelectedItem as Answer;
                 richTextBox2.Text = temp_answer.Text;
-                if (temp_question.correct_answer_id == temp_answer.Idanswers)
-                    checkBox1.Checked = true;
+                checkBox1.Checked = temp_answer.is_correct;
             }
         }
 
@@ -110,6 +118,63 @@ namespace Five_testing
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
             temp_answer.is_correct = checkBox1.Checked;
+        }
+
+        //изменение текста вопроса
+        private void richTextBox2_TextChanged(object sender, EventArgs e)
+        {
+            if (listBox2.SelectedItem != null)
+            {
+                temp_answer.Text = richTextBox2.Text;
+            }
+        }
+        
+        //установка уровня вопроса
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+            temp_question.level = Convert.ToInt32(numericUpDown1.Value);
+        }
+
+        private void Test_editing_Load(object sender, EventArgs e)
+        {
+            listBox3.Items.Clear();
+        }
+
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            if (temp_question != null)
+            {
+                if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                {
+                    temp_question.audio_file = File.ReadAllBytes(openFileDialog1.FileName);
+                }
+                button12.Enabled = true;
+                button13.Enabled = true;
+                label5.Text = temp_question.audio_file.Length.ToString();   
+            }
+        }
+
+        //Play
+        private void button12_Click(object sender, EventArgs e)
+        {
+            //загрузка аудио
+            if (temp_question.audio_file != null)
+            {
+                soundPlayer = new SoundPlayer();
+                soundPlayer.Stream = new MemoryStream(temp_question.audio_file);
+                soundPlayer.LoadAsync();
+            }
+            if (temp_question != null)
+            {
+                soundPlayer.Play();
+            }
+        }
+
+        //Stop
+        private void button13_Click(object sender, EventArgs e)
+        {
+            soundPlayer.Stop();
         }
     }
 }

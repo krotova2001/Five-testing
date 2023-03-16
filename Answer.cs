@@ -15,5 +15,10 @@ namespace Five_testing
         public string Text { get; set; } // текст ответа
         public int Question_id { get; set; } // идентификатор вопроса, к которому он принадлежит
         public bool is_correct { get; set; } = false;
+        public override string ToString()
+        {
+            return Text;
+        }
+
     }
 }
