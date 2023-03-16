@@ -176,5 +176,11 @@ namespace Five_testing
         {
             soundPlayer.Stop();
         }
+
+        //добавить видео
+        private void button10_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
