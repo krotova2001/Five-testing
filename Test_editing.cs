@@ -27,6 +27,7 @@ namespace Five_testing
         {
             InitializeComponent();
             temp_test = new Test();
+            
         }
 
         //редактирование существующего
@@ -35,7 +36,6 @@ namespace Five_testing
             InitializeComponent();
             temp_test = t;
             Refresh_questions();
-            
         }
 
         //оновить список вопросов
@@ -56,7 +56,18 @@ namespace Five_testing
         //кнопка сохранить
         private void button1_Click(object sender, EventArgs e)
         {
-            
+            //если это новый тест
+            if (temp_question.idquestion==0)
+            {
+
+            }
+
+            //если не новый
+            else
+            {
+
+            }
+
         }
 
         //выбор вопроса
