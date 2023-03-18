@@ -9,6 +9,11 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Media;
 using System.IO;
+using System.Configuration;
+using MySql.Data.MySqlClient;
+using NAudio;
+using NAudio.Wave;
+using NAudio.Lame;
 
 namespace Five_testing
 {
@@ -17,6 +22,7 @@ namespace Five_testing
     /// </summary>
     public partial class Test_editing : Form
     {
+        readonly string conn = ConfigurationManager.ConnectionStrings["MySQL"].ConnectionString;
         public Test temp_test; //временный тест для редактирования
         public Question temp_question; // временный вопрос для редактиврования
         public Answer temp_answer; // временный ответ для редактирования
@@ -56,16 +62,19 @@ namespace Five_testing
         //кнопка сохранить
         private void button1_Click(object sender, EventArgs e)
         {
-            //если это новый тест
-            if (temp_question.idquestion==0)
+            using (IDbConnection db = new MySqlConnection(conn))
             {
+                //если это новый тест
+                if (temp_question.idquestion == 0)
+                {
 
-            }
+                }
 
-            //если не новый
-            else
-            {
+                //если не новый
+                else
+                {
 
+                }
             }
 
         }
@@ -81,7 +90,11 @@ namespace Five_testing
                 numericUpDown1.Value = temp_question.level;
                 foreach (Answer a in temp_question.Answers)
                     listBox2.Items.Add(a);
-                
+                if(temp_question.audio_file != null)
+                {
+                    button12.Enabled = true;
+                    button13.Enabled = true;
+                }
                
             }
         }
@@ -151,7 +164,7 @@ namespace Five_testing
             listBox3.Items.Clear();
         }
 
-
+        //добавить аудио
         private void button8_Click(object sender, EventArgs e)
         {
             if (temp_question != null)
@@ -160,8 +173,11 @@ namespace Five_testing
                 {
                     temp_question.audio_file = File.ReadAllBytes(openFileDialog1.FileName);
                 }
-                button12.Enabled = true;
-                button13.Enabled = true;
+                if (temp_question.audio_file != null)
+                {
+                    button12.Enabled = true;
+                    button13.Enabled = true;
+                }
                 label5.Text = temp_question.audio_file.Length.ToString();   
             }
         }
@@ -192,6 +208,23 @@ namespace Five_testing
         private void button10_Click(object sender, EventArgs e)
         {
 
+        }
+
+        //изменить темы
+        private void button11_Click(object sender, EventArgs e)
+        {
+            Theme_editing theme_Editing = new Theme_editing();
+            theme_Editing.ShowDialog();
+        }
+
+        //удалить аудио
+        private void button14_Click(object sender, EventArgs e)
+        {
+            soundPlayer.Stop();
+            temp_question.audio_file = null;
+            label5.Text = "";
+            button12.Enabled = false;
+            button13.Enabled = false;
         }
     }
 }

@@ -14,7 +14,7 @@ namespace Five_testing
     {
         public int idquestion { get; set; } = 0; //идентификатор
         public string text { get; set; } // текст вопроса
-        public byte[] audio_file { get; set; } // файл аудио
+        public byte[] audio_file { get; set; } = null; // файл аудио
         public Image picture { get; set; } // картинка
         public string video_ref { get; set; } // ссылка на видео
         public int level { get; set; } = 1;// уровень вопроса
