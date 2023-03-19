@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace Five_testing
     /// <summary>
     /// вопрос в тесте, существует внутри теста
     /// </summary>
-    public  class Question
+    public  class Question : IEnumerable<Answer>
     {
         public int idquestion { get; set; } = 0; //идентификатор
         public string text { get; set; } // текст вопроса
@@ -18,14 +19,20 @@ namespace Five_testing
         public Image picture { get; set; } // картинка
         public string video_ref { get; set; } // ссылка на видео
         public int level { get; set; } = 1;// уровень вопроса
-        public string theme { get; set; } // тема вопроса
+        public Thema theme { get; set; } // тема вопроса
+        public int id_question_theme { get; set; }
         public User author { get; set; } // автор вопроса
         public int? correct_answer_id { get; set; }// идентификатор правильного ответа
         public List<Answer> Answers { get; set; }// набор ответов
 
+        public Question ()
+        {
+            Answers = new List<Answer> ();
+        }
+
         public override string ToString()
         {
-            return theme + " - " + level + " ур.";
+            return this.theme + " - " + level + " ур.";
         }
 
         /// <summary>
@@ -40,6 +47,16 @@ namespace Five_testing
                     return answer;
             }
             return null;
+        }
+
+        public IEnumerator<Answer> GetEnumerator()
+        {
+            return ((IEnumerable<Answer>)Answers).GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return ((IEnumerable)Answers).GetEnumerator();
         }
     }
 }

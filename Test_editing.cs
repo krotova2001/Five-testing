@@ -11,9 +11,11 @@ using System.Media;
 using System.IO;
 using System.Configuration;
 using MySql.Data.MySqlClient;
+using Dapper;
 using NAudio;
 using NAudio.Wave;
 using NAudio.Lame;
+
 
 namespace Five_testing
 {
@@ -24,9 +26,22 @@ namespace Five_testing
     {
         readonly string conn = ConfigurationManager.ConnectionStrings["MySQL"].ConnectionString;
         public Test temp_test; //временный тест для редактирования
+        public List<Thema> all_themas; // все темы
         public Question temp_question; // временный вопрос для редактиврования
         public Answer temp_answer; // временный ответ для редактирования
         SoundPlayer soundPlayer;
+
+
+        private void Test_editing_Load(object sender, EventArgs e)
+        {
+            listBox3.Items.Clear();
+            using (IDbConnection db = new MySqlConnection(conn))
+            {
+                all_themas = db.Query<Thema>("SELECT * FROM five_test_debug.question_theme").ToList();
+                foreach (Thema thema in all_themas)
+                    listBox3.Items.Add(thema);
+            }
+        }
 
         //создание нового
         public Test_editing()
@@ -44,12 +59,21 @@ namespace Five_testing
             Refresh_questions();
         }
 
-        //оновить список вопросов
+        //обновить список вопросов
         private void Refresh_questions()
         {
             listBox1.Items.Clear();
             foreach (Question q in temp_test)
+            {
                 listBox1.Items.Add(q);
+                foreach (Answer answer in q)
+                {
+                    if (q.correct_answer_id != null && q.correct_answer_id==answer.Idanswers)
+                    {
+                        answer.is_correct=true;
+                    }
+                }
+            }
         }
 
         //кнопка отмена
@@ -58,7 +82,7 @@ namespace Five_testing
             this.Close();
         }
 
-        //кнопка сохранить
+        //кнопка сохранить. Вот тут главная жесть...
         private void button1_Click(object sender, EventArgs e)
         {
             using (IDbConnection db = new MySqlConnection(conn))
@@ -66,16 +90,37 @@ namespace Five_testing
                 //если это новый тест
                 if (temp_question.idquestion == 0)
                 {
-
+                    foreach (Question question in temp_test)
+                    {
+                        foreach (Answer answer in question)
+                        {
+                            string insert_query = $@"INSERT INTO five_test_debug.answers (text, question_id)
+                                                        VALUES () ";
+                            //var id = 
+                        }
+                    }
                 }
 
                 //если не новый
                 else
                 {
-
+                    foreach(Question question in temp_test)
+                    {
+                        foreach (Answer answer in question)
+                        {
+                            string insert_ans = $@"UPDATE five_test_debug.answers SET text='{answer.Text}' WHERE idanswers={answer.Idanswers}";
+                            db.Execute(insert_ans);
+                        }
+                        string insert_quest = $@"UPDATE five_test_debug.questions SET 
+                                                text='{question.text}', 
+                                                level={question.level},                                                    
+                                                correct_answer_id = {question.correct_answer_id},
+                                                id_question_theme = {question.id_question_theme}
+                                                WHERE idquestion={question.idquestion}";
+                        db.Execute(insert_quest);
+                    }
                 }
             }
-
         }
 
         //выбор вопроса
@@ -86,6 +131,7 @@ namespace Five_testing
                 temp_question = (Question)listBox1.SelectedItem;
                 richTextBox1.Text = temp_question.text;
                 listBox2.Items.Clear();
+                richTextBox2.Clear();
                 numericUpDown1.Value = temp_question.level;
                 foreach (Answer a in temp_question.Answers)
                     listBox2.Items.Add(a);
@@ -94,6 +140,12 @@ namespace Five_testing
                     button12.Enabled = true;
                     button13.Enabled = true;
                 }
+                foreach (Thema thema in all_themas)
+                {
+                    if (thema.idtheme == temp_question.id_question_theme)
+                        listBox3.SelectedItem = thema;
+                }
+                
                
             }
         }
@@ -112,14 +164,14 @@ namespace Five_testing
                 listBox1.Items.Remove(listBox1.SelectedItem);
         }
 
-        //удалить вопрос
+        //удалить ответ
         private void button7_Click(object sender, EventArgs e)
         {
             if (listBox2.SelectedItem != null)
                 listBox2.Items.Remove(listBox2.SelectedItem);
         }
 
-        //добавить вопрос
+        //добавить ответ
         private void button6_Click(object sender, EventArgs e)
         {
             Answer answer = new Answer();
@@ -141,9 +193,13 @@ namespace Five_testing
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
             temp_answer.is_correct = checkBox1.Checked;
+            if (temp_answer.is_correct)
+                temp_question.correct_answer_id = temp_answer.Idanswers;
+            else
+                temp_question.correct_answer_id = null;
         }
 
-        //изменение текста вопроса
+        //изменение текста ответа
         private void richTextBox2_TextChanged(object sender, EventArgs e)
         {
             if (listBox2.SelectedItem != null)
@@ -156,11 +212,6 @@ namespace Five_testing
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
             temp_question.level = Convert.ToInt32(numericUpDown1.Value);
-        }
-
-        private void Test_editing_Load(object sender, EventArgs e)
-        {
-            listBox3.Items.Clear();
         }
 
         //добавить аудио
@@ -224,6 +275,23 @@ namespace Five_testing
             label5.Text = "";
             button12.Enabled = false;
             button13.Enabled = false;
+        }
+
+        //изменение текста вопроса
+        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
+            if (temp_question != null)
+                temp_question.text = richTextBox1.Text;
+        }
+
+        //выбор тематики
+        private void listBox3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (temp_question != null)
+            {
+                temp_question.theme = listBox3.SelectedItem as Thema;
+                temp_question.id_question_theme = temp_question.theme.idtheme; // дублирование функций
+            }
         }
     }
 }

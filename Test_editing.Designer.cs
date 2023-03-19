@@ -55,8 +55,8 @@
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.button10 = new System.Windows.Forms.Button();
             this.button9 = new System.Windows.Forms.Button();
-            this.button8 = new System.Windows.Forms.Button();
             this.button14 = new System.Windows.Forms.Button();
+            this.button8 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
@@ -130,7 +130,7 @@
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(226, 25);
             this.button5.TabIndex = 6;
-            this.button5.Text = "Добавить из другого теста";
+            this.button5.Text = "Все вопросы";
             this.button5.UseVisualStyleBackColor = true;
             // 
             // label1
@@ -162,6 +162,7 @@
             this.richTextBox1.Size = new System.Drawing.Size(371, 95);
             this.richTextBox1.TabIndex = 10;
             this.richTextBox1.Text = "";
+            this.richTextBox1.TextChanged += new System.EventHandler(this.richTextBox1_TextChanged);
             // 
             // listBox2
             // 
@@ -289,6 +290,7 @@
             this.listBox3.Name = "listBox3";
             this.listBox3.Size = new System.Drawing.Size(120, 186);
             this.listBox3.TabIndex = 22;
+            this.listBox3.SelectedIndexChanged += new System.EventHandler(this.listBox3_SelectedIndexChanged);
             // 
             // label4
             // 
@@ -323,7 +325,7 @@
             // 
             // button10
             // 
-            this.button10.Location = new System.Drawing.Point(654, 389);
+            this.button10.Location = new System.Drawing.Point(648, 388);
             this.button10.Name = "button10";
             this.button10.Size = new System.Drawing.Size(127, 23);
             this.button10.TabIndex = 18;
@@ -333,22 +335,12 @@
             // 
             // button9
             // 
-            this.button9.Location = new System.Drawing.Point(654, 360);
+            this.button9.Location = new System.Drawing.Point(648, 359);
             this.button9.Name = "button9";
             this.button9.Size = new System.Drawing.Size(127, 23);
             this.button9.TabIndex = 17;
             this.button9.Text = "Добавить картинку";
             this.button9.UseVisualStyleBackColor = true;
-            // 
-            // button8
-            // 
-            this.button8.Location = new System.Drawing.Point(431, 427);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(127, 23);
-            this.button8.TabIndex = 16;
-            this.button8.Text = "Добавить аудио";
-            this.button8.UseVisualStyleBackColor = true;
-            this.button8.Click += new System.EventHandler(this.button8_Click);
             // 
             // button14
             // 
@@ -359,6 +351,16 @@
             this.button14.Text = "Удалить аудио";
             this.button14.UseVisualStyleBackColor = true;
             this.button14.Click += new System.EventHandler(this.button14_Click);
+            // 
+            // button8
+            // 
+            this.button8.Location = new System.Drawing.Point(431, 427);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(127, 23);
+            this.button8.TabIndex = 16;
+            this.button8.Text = "Добавить аудио";
+            this.button8.UseVisualStyleBackColor = true;
+            this.button8.Click += new System.EventHandler(this.button8_Click);
             // 
             // Test_editing
             // 

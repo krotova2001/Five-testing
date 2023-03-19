@@ -18,3 +18,8 @@ C:\Users\zvuk2\Source\Repos\krotova2001\Five-testing\obj\Debug\Five_testing.Grou
 C:\Users\zvuk2\Source\Repos\krotova2001\Five-testing\bin\Debug\Five-testing.exe.config
 C:\Users\zvuk2\Source\Repos\krotova2001\Five-testing\obj\Debug\Five_testing.Test_editing.resources
 C:\Users\zvuk2\Source\Repos\krotova2001\Five-testing\obj\Debug\Five_testing.Theme_editing.resources
+C:\Users\zvuk2\Source\Repos\krotova2001\Five-testing\bin\Debug\libmp3lame.32.dll
+C:\Users\zvuk2\Source\Repos\krotova2001\Five-testing\bin\Debug\libmp3lame.64.dll
+C:\Users\zvuk2\Source\Repos\krotova2001\Five-testing\bin\Debug\NAudio.Core.dll
+C:\Users\zvuk2\Source\Repos\krotova2001\Five-testing\bin\Debug\NAudio.Lame.dll
+C:\Users\zvuk2\Source\Repos\krotova2001\Five-testing\bin\Debug\NAudio.Lame.pdb

@@ -1,4 +1,15 @@
-﻿using System;
+﻿//TODO Переделать архитектуру - добавить класс SQLWorker
+
+//TODO Сделать одно окно для простых типов - Темы и Группы. Можно в виде DataGridView
+
+//TODO Dapper переделать запросы на nameof
+
+//TODO Как-нибудь не делать UPDATE для данных, которые не изменены...
+
+//TODO сделать больше одного правильного ответа
+
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -71,15 +82,14 @@ namespace Five_testing
                 all_tests = db.Query<Test>("SELECT * FROM five_test_debug.test join info on test.idtest = info.test_id;").ToList();
                 foreach (Test test in all_tests)
                 {
-                    //это надо переделать
-                    listBox1.Items.Add(test);
                     test.questions = db.Query<Question>($@"SELECT * FROM test_set join questions on test_set.id_question = questions.idquestion 
-                                                        join question_theme on question_theme.idtheme = questions.id_question_theme
                                                         WHERE test_set.idtest = {test.idtest}").ToList();
                     foreach (Question question in test.questions)
                     {
                         question.Answers = db.Query<Answer>($"SELECT * FROM five_test_debug.answers WHERE question_id = {question.idquestion};").ToList();
+                        question.theme = db.QueryFirstOrDefault<Thema>($"SELECT * FROM five_test_debug.question_theme WHERE idtheme = {question.id_question_theme};");
                     }
+                    listBox1.Items.Add(test);
                 }
             }
         }
@@ -155,6 +165,12 @@ namespace Five_testing
                 Test_editing test_Editing = new Test_editing(current_test);
                 test_Editing.ShowDialog();
             }
+        }
+
+        //двойной щелчок на выбранном тесте
+        private void listBox1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            button5_Click(sender, e);
         }
 
         #endregion
@@ -431,10 +447,6 @@ namespace Five_testing
             formGraphics.TextContrast = 0;
         }
 
-        //двойной щелчок на выбранном тесте
-        private void listBox1_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            button5_Click(sender, e);
-        }
+        
     }
 } 
