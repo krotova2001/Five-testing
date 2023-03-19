@@ -55,7 +55,6 @@ namespace Five_testing
         //кнопка отмена
         private void button2_Click(object sender, EventArgs e)
         {
-            DialogResult result = DialogResult.Cancel;
             this.Close();
         }
 
