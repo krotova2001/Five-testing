@@ -134,7 +134,7 @@ namespace Five_testing
                 richTextBox2.Clear();
                 numericUpDown1.Value = temp_question.level;
                 foreach (Answer a in temp_question.Answers)
-                    listBox2.Items.Add(a);
+                    listBox2.Items.Add(a); 
                 if(temp_question.audio_file != null)
                 {
                     button12.Enabled = true;
