@@ -140,7 +140,16 @@ namespace Five_testing
         //удалить тест
         private void button7_Click(object sender, EventArgs e)
         {
-
+            if(current_test != null)
+            {
+                DialogResult result = MessageBox.Show("Внимание! Отменить это действие будет невозможно!", "Удаление Пользователя", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+                if (result == DialogResult.OK)
+                using (IDbConnection db = new MySqlConnection())
+                    {
+                        db.Execute($"DELETE FROM five_test_debug.test WHERE idtest = {current_test.idtest}");
+                    }
+                    Refresh_test_list();
+            }
         }
 
         //экспорт теста

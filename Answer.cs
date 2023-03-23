@@ -11,7 +11,7 @@ namespace Five_testing
     /// </summary>
     public class Answer
     {
-        public int Idanswers { get; set; } // идентификатор 
+        public int Idanswers { get; set; } = 0; // идентификатор 
         public string Text { get; set; } // текст ответа
         public int Question_id { get; set; } // идентификатор вопроса, к которому он принадлежит
         public bool is_correct { get; set; } = false;

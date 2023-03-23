@@ -30,11 +30,13 @@ namespace Five_testing
         public Question temp_question; // временный вопрос для редактиврования
         public Answer temp_answer; // временный ответ для редактирования
         SoundPlayer soundPlayer;
+        
 
 
         private void Test_editing_Load(object sender, EventArgs e)
         {
             listBox3.Items.Clear();
+            this.Name = $"Редактирование теста - {temp_test.name}";
             using (IDbConnection db = new MySqlConnection(conn))
             {
                 all_themas = db.Query<Thema>("SELECT * FROM five_test_debug.question_theme").ToList();
@@ -95,8 +97,9 @@ namespace Five_testing
                         foreach (Answer answer in question)
                         {
                             string insert_query = $@"INSERT INTO five_test_debug.answers (text, question_id)
-                                                        VALUES () ";
-                            //var id = 
+                                                        VALUES ('{answer.Text}', {answer.Question_id}) ";
+                            string update_query = $@"UPDATE five_test_debug.answers SET text ='{answer.Text}'
+                                                        WHERE idanswers={answer.Idanswers}";
                         }
                     }
                 }
@@ -106,18 +109,24 @@ namespace Five_testing
                 {
                     foreach(Question question in temp_test)
                     {
+                        //что-то надо придумать с удадением ответов из БД
                         foreach (Answer answer in question)
                         {
-                            string insert_ans = $@"UPDATE five_test_debug.answers SET text='{answer.Text}' WHERE idanswers={answer.Idanswers}";
-                            db.Execute(insert_ans);
+                            string update_ans = $@"UPDATE five_test_debug.answers SET text='{answer.Text}' WHERE idanswers={answer.Idanswers}";
+                            string insert_ans = $@"INSERT INTO five_test_debug.answers (text, question_id)
+                                                        VALUES ('{answer.Text}', {answer.Question_id}) ";
+                            if (answer.Idanswers == 0) // если это новый добавленный ответ
+                                db.Execute(insert_ans);
+                            else
+                                db.Execute(update_ans); // если изменить существующий ответ
                         }
-                        string insert_quest = $@"UPDATE five_test_debug.questions SET 
+                        string update_quest = $@"UPDATE five_test_debug.questions SET 
                                                 text='{question.text}', 
                                                 level={question.level},                                                    
                                                 correct_answer_id = {question.correct_answer_id},
                                                 id_question_theme = {question.id_question_theme}
                                                 WHERE idquestion={question.idquestion}";
-                        db.Execute(insert_quest);
+                        db.Execute(update_quest);
                     }
                 }
             }
@@ -168,14 +177,21 @@ namespace Five_testing
         private void button7_Click(object sender, EventArgs e)
         {
             if (listBox2.SelectedItem != null)
+            {
                 listBox2.Items.Remove(listBox2.SelectedItem);
+                temp_question.Answers.Remove(listBox2.SelectedItem as Answer);
+            }
+                
         }
 
         //добавить ответ
         private void button6_Click(object sender, EventArgs e)
         {
             Answer answer = new Answer();
+            answer.Text = richTextBox2.Text;
+            answer.Question_id = temp_question.idquestion;
             listBox2.Items.Add(answer);
+            temp_question.Answers.Add(answer);
         }
 
         //выбор ответа
