@@ -22,6 +22,7 @@ namespace Five_testing
         public Thema theme { get; set; } // тема вопроса
         public int id_question_theme { get; set; }
         public User author { get; set; } // автор вопроса
+        public int author_id { get; set; } = 0;
         public int? correct_answer_id { get; set; }// идентификатор правильного ответа
         public List<Answer> Answers { get; set; }// набор ответов
 

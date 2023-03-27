@@ -69,6 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Answer.cs" />
+    <Compile Include="SQL_worker.cs" />
     <Compile Include="Thema.cs" />
     <Compile Include="Theme_editing.cs">
       <SubType>Form</SubType>
