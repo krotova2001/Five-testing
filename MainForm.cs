@@ -1,4 +1,11 @@
-﻿using System;
+﻿//TODO Переделать архитектуру - добавить класс SQLWorker
+//TODO Сделать одно окно для простых типов - Темы и Группы. Можно в виде DataGridView
+//TODO Dapper переделать запросы на nameof
+//TODO Как-нибудь не делать UPDATE для данных, которые не изменены...
+//TODO сделать больше одного правильного ответа
+//TODO Закрыть все активные подключения к БД на выходе из программы
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -71,11 +78,14 @@ namespace Five_testing
                 all_tests = db.Query<Test>("SELECT * FROM five_test_debug.test join info on test.idtest = info.test_id;").ToList();
                 foreach (Test test in all_tests)
                 {
-                    listBox1.Items.Add(test);
                     test.questions = db.Query<Question>($@"SELECT * FROM test_set join questions on test_set.id_question = questions.idquestion 
-                                                        join question_theme on question_theme.idtheme = questions.id_question_theme
                                                         WHERE test_set.idtest = {test.idtest}").ToList();
-                    
+                    foreach (Question question in test.questions)
+                    {
+                        question.Answers = db.Query<Answer>($"SELECT * FROM five_test_debug.answers WHERE question_id = {question.idquestion};").ToList();
+                        question.theme = db.QueryFirstOrDefault<Thema>($"SELECT * FROM five_test_debug.question_theme WHERE idtheme = {question.id_question_theme};");
+                    }
+                    listBox1.Items.Add(test);
                 }
             }
         }
@@ -104,12 +114,69 @@ namespace Five_testing
             if (current_test != null && listBox2.SelectedItem != null)
             {
                 Question q = listBox2.SelectedItem as Question;
-                textBox10.Text = q.text;
+                textBox11.Text = q.text;
+                richTextBox1.Clear();
+                foreach (Answer answer in q.Answers)
+                {
+                    if (q.correct_answer_id == answer.Idanswers)
+                    {
+                        //жирный текст не работает...
+                        richTextBox1.SelectionFont = new Font(richTextBox1.Font, FontStyle.Bold);
+                        richTextBox1.Text += ($"{answer.Text} - correct\n");
+                        richTextBox1.SelectionFont = new Font(richTextBox1.Font, FontStyle.Regular);
+                    }
+                    else
+                    {
+                        richTextBox1.Text += $"{answer.Text}\n";
+                    }
+                }
             }
         }
 
+        //удалить тест
+        private void button7_Click(object sender, EventArgs e)
+        {
+            if(current_test != null)
+            {
+                DialogResult result = MessageBox.Show("Внимание! Отменить это действие будет невозможно!", "Удаление Пользователя", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+                if (result == DialogResult.OK)
+                using (IDbConnection db = new MySqlConnection())
+                    {
+                        db.Execute($"DELETE FROM five_test_debug.test WHERE idtest = {current_test.idtest}");
+                    }
+                    Refresh_test_list();
+            }
+        }
 
+        //экспорт теста
+        private void button8_Click(object sender, EventArgs e)
+        {
 
+        }
+
+        //создать новый тест
+        private void button6_Click(object sender, EventArgs e)
+        {
+            Test t = new Test(current_user);
+            Test_editing test_Editing = new Test_editing(t, current_user);
+            test_Editing.ShowDialog();
+        }
+
+        //редактировать тест
+        private void button5_Click(object sender, EventArgs e)
+        {
+            if (current_test != null)
+            {
+                Test_editing test_Editing = new Test_editing(current_test, current_user);
+                test_Editing.ShowDialog();
+            }
+        }
+
+        //двойной щелчок на выбранном тесте
+        private void listBox1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            button5_Click(sender, e);
+        }
 
         #endregion
 
@@ -173,14 +240,12 @@ namespace Five_testing
                 {
                     try
                     {
-                        using (MySqlConnection db = new MySqlConnection(connectionString))
+                        using (IDbConnection db = new MySqlConnection(connectionString))
                         {
                             db.Open();
-                            MySqlCommand Command = new MySqlCommand($"DELETE FROM users WHERE id = {id_to_del}");
-                            Command.Connection = db;
                             DialogResult result = MessageBox.Show("Внимание! Отменить это действие будет невозможно!", "Удаление Пользователя", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
                             if (result == DialogResult.OK)
-                                Command.ExecuteNonQuery();
+                                db.Execute($"DELETE FROM users WHERE id = {id_to_del}");
                             Refresh_user_list();
                         }
                     }
@@ -237,12 +302,9 @@ namespace Five_testing
                     {
                         try
                         {
-                            using (MySqlConnection db = new MySqlConnection(connectionString))
+                            using (IDbConnection db = new MySqlConnection(connectionString))
                             {
-                                db.Open();
-                                MySqlCommand Command = new MySqlCommand($"UPDATE five_test_debug.users SET name = '{textBox5.Text}', surname = '{textBox6.Text}', username = '{textBox1.Text}', password='{textBox2.Text}', email='{textBox4.Text}', telephone = '{textBox3.Text}', age = {Convert.ToInt32(numericUpDown1.Value)}, is_prepod={prepod}, is_student={student}, is_admin={admin}, group_id={group_id} WHERE id = {id_to_del}");
-                                Command.Connection = db;
-                                Command.ExecuteNonQuery();
+                                db.Execute($"UPDATE five_test_debug.users SET name = '{textBox5.Text}', surname = '{textBox6.Text}', username = '{textBox1.Text}', password='{textBox2.Text}', email='{textBox4.Text}', telephone = '{textBox3.Text}', age = {Convert.ToInt32(numericUpDown1.Value)}, is_prepod={prepod}, is_student={student}, is_admin={admin}, group_id={group_id} WHERE id = {id_to_del}");
                                 Refresh_user_list();
                             }
                         }
@@ -297,12 +359,9 @@ namespace Five_testing
             }
             if (textBox1.Text.Length > 0 && textBox2.Text.Length > 0 && textBox5.Text.Length > 0 && textBox6.Text.Length > 0)
             {
-                using(MySqlConnection db = new MySqlConnection(connectionString))
+                using(IDbConnection db = new MySqlConnection(connectionString))
                 {
-                    db.Open();
-                    MySqlCommand Command = new MySqlCommand($"INSERT INTO five_test_debug.users (username, password, email, name, surname, is_prepod, is_student, is_admin, age, telephone, group_id) VALUES ('{u.username}', '{u.password}', '{u.email}', '{u.name}', '{u.surname}', {u.is_prepod}, {u.is_student}, {u.is_admin}, {u.age}, '{u.phone}', {u.group_id})");
-                    Command.Connection = db;
-                    Command.ExecuteNonQuery();
+                    db.Execute($"INSERT INTO five_test_debug.users (username, password, email, name, surname, is_prepod, is_student, is_admin, age, telephone, group_id) VALUES ('{u.username}', '{u.password}', '{u.email}', '{u.name}', '{u.surname}', {u.is_prepod}, {u.is_student}, {u.is_admin}, {u.age}, '{u.phone}', {u.group_id})");
                     Refresh_user_list();
                 }
             }
@@ -385,6 +444,9 @@ namespace Five_testing
             formGraphics.TextContrast = 0;
         }
 
-        
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            //закрыть все активные подключения к БД
+        }
     }
 } 
