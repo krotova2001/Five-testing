@@ -17,7 +17,10 @@ namespace Five_testing
         readonly string connectionString = ConfigurationManager.ConnectionStrings["MySQL"].ConnectionString;
         public  User current_user; // текущий пользователь
         IDbConnection db;
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="u">текущий пользователь</param>
         public SQL_worker(User u)
         {
             current_user = u;
@@ -34,6 +37,17 @@ namespace Five_testing
             db.Execute(del_ans);
             db.Execute(del_from_set);
             db.Execute(del_ques);
+        }
+
+        /// <summary>
+        /// создание нового теста
+        /// </summary>
+        /// <returns>ид теста из БАзы данных</returns>
+        public int Create_new_test(Test t) 
+        {
+            return db.Query<int>($@"INSERT INTO five_test_debug.test (info, author_id, name)
+                                    VALUES ('{t.info}', {current_user.Id}, '{t.name}');
+                                        SELECT LAST_INSERT_ID();" ).First();
         }
     }
 }

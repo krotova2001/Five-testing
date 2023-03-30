@@ -93,10 +93,9 @@ namespace Five_testing
         //выбор теста в редактировании
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            current_test = null;
-            if (listBox1.SelectedItems != null)
+            current_test = listBox1.SelectedItem as Test;
+            if (current_test != null)
             {
-                current_test = listBox1.SelectedItem as Test;
                 textBox7.Text = current_test.info;
                 textBox8.Text = current_test.text;
                 textBox9.Text = current_test.date.ToShortDateString();

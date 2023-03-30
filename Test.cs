@@ -12,7 +12,7 @@ namespace Five_testing
     /// </summary>
     public class Test:IEnumerable<Question>
     {
-        public int idtest { get; set; } //идентификатор
+        public int idtest { get; set; } = 0; //идентификатор
         public string name { get; set; } // название
         public string info { get; set; } // описание
         public int author_id { get; set; } //идентификатор автора

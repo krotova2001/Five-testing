@@ -89,6 +89,8 @@ namespace Five_testing
         //кнопка сохранить. Вот тут главная жесть...
         private void button1_Click(object sender, EventArgs e)
         {
+            if (temp_test.idtest == 0) // если это новый тест - занесем его в бд
+                temp_test.idtest = worker.Create_new_test(temp_test);
             foreach (Question question in temp_test)
             {
                 if (question.idquestion == 0) //если это новый вопрос
