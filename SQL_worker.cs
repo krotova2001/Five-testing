@@ -12,24 +12,23 @@ using System.Data;
 
 namespace Five_testing
 {
-    public  class SQL_worker
+    public static class SQL_worker
     {
-        readonly string connectionString = ConfigurationManager.ConnectionStrings["MySQL"].ConnectionString;
-        public  User current_user; // текущий пользователь
-        IDbConnection db;
+        readonly static string connectionString = ConfigurationManager.ConnectionStrings["MySQL"].ConnectionString;
+        public static User current_user; // текущий пользователь
+        static IDbConnection db;
         /// <summary>
         /// 
         /// </summary>
         /// <param name="u">текущий пользователь</param>
-        public SQL_worker(User u)
+        static SQL_worker()
         {
-            current_user = u;
             db = new MySqlConnection(connectionString);
             db.Open();
         }
 
         //удаление вопроса из БД по ИД
-        public void Delete_question(int id)
+        public static void Delete_question(int id)
         {
             string del_ans = $"DELETE from five_test_debug.answers where question_id = {id}";
             string del_from_set = $"DELETE FROM five_test_debug.test_set where id_question = {id}";
@@ -43,7 +42,7 @@ namespace Five_testing
         /// создание нового теста
         /// </summary>
         /// <returns>ид теста из БАзы данных</returns>
-        public int Create_new_test(Test t) 
+        public static int Create_new_test(Test t) 
         {
             return db.Query<int>($@"INSERT INTO five_test_debug.test (info, author_id, name)
                                     VALUES ('{t.info}', {current_user.Id}, '{t.name}');

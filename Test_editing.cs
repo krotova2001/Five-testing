@@ -32,7 +32,6 @@ namespace Five_testing
         public User user;
         SoundPlayer soundPlayer;
         IDbConnection db;
-        SQL_worker worker;
 
         private void Test_editing_Load(object sender, EventArgs e)
         {
@@ -43,7 +42,6 @@ namespace Five_testing
             all_themas = db.Query<Thema>("SELECT * FROM five_test_debug.question_theme").ToList();
             foreach (Thema thema in all_themas)
                 listBox3.Items.Add(thema);
-            worker = new SQL_worker(user);
         }
 
         //создание нового
@@ -90,7 +88,7 @@ namespace Five_testing
         private void button1_Click(object sender, EventArgs e)
         {
             if (temp_test.idtest == 0) // если это новый тест - занесем его в бд
-                temp_test.idtest = worker.Create_new_test(temp_test);
+                temp_test.idtest = SQL_worker.Create_new_test(temp_test);
             foreach (Question question in temp_test)
             {
                 if (question.idquestion == 0) //если это новый вопрос
@@ -180,7 +178,7 @@ namespace Five_testing
                 listBox1.Items.Remove(listBox1.SelectedItem);
                 temp_test.questions.Remove(temp_question);
                 if (temp_question.idquestion != 0)
-                    worker.Delete_question(temp_question.idquestion);
+                    SQL_worker.Delete_question(temp_question.idquestion);
             }
             Refresh_questions();
         }
@@ -214,7 +212,6 @@ namespace Five_testing
                 Thread.Sleep(1000);
                 label6.Enabled = false;
             }
-           
         }
 
         //выбор ответа

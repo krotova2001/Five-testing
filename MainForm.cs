@@ -42,6 +42,7 @@ namespace Five_testing
             if (login.ShowDialog() == DialogResult.Cancel)
                 this.Close();
             current_user = login.Fill_user(); // передаем текущего пользователя
+            SQL_worker.current_user = current_user;
             
             //сокрытие лишних вкладок в зависимости от роли пользователя
             if (current_user.is_student == true)
@@ -157,6 +158,7 @@ namespace Five_testing
         private void button6_Click(object sender, EventArgs e)
         {
             Test t = new Test(current_user);
+            t.idtest = SQL_worker.Create_new_test(t);
             Test_editing test_Editing = new Test_editing(t, current_user);
             test_Editing.ShowDialog();
         }
