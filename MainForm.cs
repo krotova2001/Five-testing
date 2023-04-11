@@ -75,7 +75,7 @@ namespace Five_testing
             using (IDbConnection db = new MySqlConnection(connectionString))
             {
                 listBox1.Items.Clear();
-                all_tests = db.Query<Test>("SELECT * FROM five_test_debug.test join info on test.idtest = info.test_id;").ToList();
+                all_tests = db.Query<Test>("SELECT * FROM five_test_debug.test").ToList();
                 foreach (Test test in all_tests)
                 {
                     test.questions = db.Query<Question>($@"SELECT * FROM test_set join questions on test_set.id_question = questions.idquestion 
