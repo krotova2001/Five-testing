@@ -1,9 +1,10 @@
-﻿//TODO Переделать архитектуру - добавить класс SQLWorker
+﻿//TODO Переделать архитектуру - добавить класс SQLWorker//
 //TODO Сделать одно окно для простых типов - Темы и Группы. Можно в виде DataGridView
 //TODO Dapper переделать запросы на nameof
 //TODO Как-нибудь не делать UPDATE для данных, которые не изменены...
 //TODO сделать больше одного правильного ответа
 //TODO Закрыть все активные подключения к БД на выходе из программы
+//TODO Доделать приветственное сообщение в тесте
 
 using System;
 using System.Collections.Generic;
@@ -42,6 +43,7 @@ namespace Five_testing
             if (login.ShowDialog() == DialogResult.Cancel)
                 this.Close();
             current_user = login.Fill_user(); // передаем текущего пользователя
+            SQL_worker.current_user = current_user;
             
             //сокрытие лишних вкладок в зависимости от роли пользователя
             if (current_user.is_student == true)
@@ -75,7 +77,7 @@ namespace Five_testing
             using (IDbConnection db = new MySqlConnection(connectionString))
             {
                 listBox1.Items.Clear();
-                all_tests = db.Query<Test>("SELECT * FROM five_test_debug.test join info on test.idtest = info.test_id;").ToList();
+                all_tests = db.Query<Test>("SELECT * FROM five_test_debug.test").ToList();
                 foreach (Test test in all_tests)
                 {
                     test.questions = db.Query<Question>($@"SELECT * FROM test_set join questions on test_set.id_question = questions.idquestion 
@@ -93,10 +95,9 @@ namespace Five_testing
         //выбор теста в редактировании
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            current_test = null;
-            if (listBox1.SelectedItems != null)
+            current_test = listBox1.SelectedItem as Test;
+            if (current_test != null)
             {
-                current_test = listBox1.SelectedItem as Test;
                 textBox7.Text = current_test.info;
                 textBox8.Text = current_test.text;
                 textBox9.Text = current_test.date.ToShortDateString();
@@ -158,6 +159,7 @@ namespace Five_testing
         private void button6_Click(object sender, EventArgs e)
         {
             Test t = new Test(current_user);
+            t.idtest = SQL_worker.Create_new_test(t);
             Test_editing test_Editing = new Test_editing(t, current_user);
             test_Editing.ShowDialog();
         }

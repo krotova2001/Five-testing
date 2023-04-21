@@ -35,5 +35,29 @@ namespace Five_testing
             db.Execute(del_from_set);
             db.Execute(del_ques);
         }
+
+        /// <summary>
+        /// создание нового теста
+        /// </summary>
+        /// <param name="t">Экземпляр теста</param>
+        /// <returns>id нового теста</returns>
+        public int Create_new_test(Test t)
+        {
+            string query = $@"INSERT INTO five_test_debug.test (info, author_id, name) VALUES ('{t.info}', {current_user.Id}, '{t.info}'); 
+                            SELECT LAST_INSERT_ID();";
+            int res = db.Query<int>(query).First();
+            return res;
+        }
+
+        /// <summary>
+        /// обновление теста существующего в бд
+        /// </summary>
+        /// <param name="t">Экземпляр теста</param>
+        public void Update_test(Test t)
+        {
+            string query = $@"UPDATE five_test_debug.test SET 
+                            info = '{t.info}', name = {t.name}' WHERE idtest = {t.idtest})"; 
+            db.Execute(query);
+        }
     }
 }

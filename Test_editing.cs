@@ -44,6 +44,11 @@ namespace Five_testing
             foreach (Thema thema in all_themas)
                 listBox3.Items.Add(thema);
             worker = new SQL_worker(user);
+            if (temp_test.idtest!=0)
+            {
+                textBox1.Text = temp_test.name;
+                richTextBox3.Text = temp_test.info;
+            }
         }
 
         //создание нового
@@ -89,6 +94,8 @@ namespace Five_testing
         //кнопка сохранить. Вот тут главная жесть...
         private void button1_Click(object sender, EventArgs e)
         {
+            if(temp_test.idtest==0)
+                temp_test.idtest = worker.Create_new_test(temp_test); // получение id свежему тесту
             foreach (Question question in temp_test)
             {
                 if (question.idquestion == 0) //если это новый вопрос
@@ -334,6 +341,18 @@ namespace Five_testing
         private void Test_editing_FormClosing(object sender, FormClosingEventArgs e)
         {
             db.Close();
+        }
+
+        //название теста
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            temp_test.name = textBox1.Text;
+        }
+
+        //информация о тесте
+        private void richTextBox3_TextChanged(object sender, EventArgs e)
+        {
+            temp_test.info = richTextBox3.Text;
         }
     }
 }

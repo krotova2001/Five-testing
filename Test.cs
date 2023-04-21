@@ -12,12 +12,13 @@ namespace Five_testing
     /// </summary>
     public class Test:IEnumerable<Question>
     {
-        public int idtest { get; set; } //идентификатор
+        public int idtest { get; set; } = 0; //идентификатор
         public string name { get; set; } // название
         public string info { get; set; } // описание
         public int author_id { get; set; } //идентификатор автора
         public DateTime date { get; set; } // дата создания, надо поменять потом на дату редактирования
         public string text { get; set; } // приветственная информация
+        public int info_id { get; set; } // ссылка на приветственную информацию
         public List<Question> questions { get; set; } // список вопросов
         User author { get; set; } // автор теста
 
