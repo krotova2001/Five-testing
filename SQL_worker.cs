@@ -12,11 +12,11 @@ using System.Data;
 
 namespace Five_testing
 {
-    public  class SQL_worker
+    public class SQL_worker
     {
-        readonly string connectionString = ConfigurationManager.ConnectionStrings["MySQL"].ConnectionString;
-        public  User current_user; // текущий пользователь
-        IDbConnection db;
+        private static readonly string connectionString = ConfigurationManager.ConnectionStrings["MySQL"].ConnectionString;
+        public static User current_user; // текущий пользователь
+        static IDbConnection db;
 
         public SQL_worker(User u)
         {
@@ -26,7 +26,7 @@ namespace Five_testing
         }
 
         //удаление вопроса из БД по ИД
-        public void Delete_question(int id)
+        public static void Delete_question(int id)
         {
             string del_ans = $"DELETE from five_test_debug.answers where question_id = {id}";
             string del_from_set = $"DELETE FROM five_test_debug.test_set where id_question = {id}";
@@ -41,7 +41,7 @@ namespace Five_testing
         /// </summary>
         /// <param name="t">Экземпляр теста</param>
         /// <returns>id нового теста</returns>
-        public int Create_new_test(Test t)
+        public static int Create_new_test(Test t)
         {
             string query = $@"INSERT INTO five_test_debug.test (info, author_id, name) VALUES ('{t.info}', {current_user.Id}, '{t.info}'); 
                             SELECT LAST_INSERT_ID();";
@@ -53,7 +53,7 @@ namespace Five_testing
         /// обновление теста существующего в бд
         /// </summary>
         /// <param name="t">Экземпляр теста</param>
-        public void Update_test(Test t)
+        public static void Update_test(Test t)
         {
             string query = $@"UPDATE five_test_debug.test SET 
                             info = '{t.info}', name = {t.name}' WHERE idtest = {t.idtest})"; 

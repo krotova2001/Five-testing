@@ -94,8 +94,8 @@ namespace Five_testing
         //кнопка сохранить. Вот тут главная жесть...
         private void button1_Click(object sender, EventArgs e)
         {
-            if(temp_test.idtest==0)
-                temp_test.idtest = worker.Create_new_test(temp_test); // получение id свежему тесту
+            if(temp_test.idtest==0) // если это новый тест
+                temp_test.idtest = SQL_worker.Create_new_test(temp_test); // получение id свежему тесту
             foreach (Question question in temp_test)
             {
                 if (question.idquestion == 0) //если это новый вопрос
@@ -185,7 +185,7 @@ namespace Five_testing
                 listBox1.Items.Remove(listBox1.SelectedItem);
                 temp_test.questions.Remove(temp_question);
                 if (temp_question.idquestion != 0)
-                    worker.Delete_question(temp_question.idquestion);
+                    SQL_worker.Delete_question(temp_question.idquestion);
             }
             Refresh_questions();
         }
