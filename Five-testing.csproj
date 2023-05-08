@@ -69,6 +69,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Answer.cs" />
+    <Compile Include="Editing_univers.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Editing_univers.Designer.cs">
+      <DependentUpon>Editing_univers.cs</DependentUpon>
+    </Compile>
     <Compile Include="SQL_worker.cs" />
     <Compile Include="Thema.cs" />
     <Compile Include="Theme_editing.cs">
@@ -108,6 +114,9 @@
       <DependentUpon>Test_editing.cs</DependentUpon>
     </Compile>
     <Compile Include="User.cs" />
+    <EmbeddedResource Include="Editing_univers.resx">
+      <DependentUpon>Editing_univers.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Groups_editing.resx">
       <DependentUpon>Groups_editing.cs</DependentUpon>
     </EmbeddedResource>
@@ -133,6 +142,7 @@
       <DependentUpon>Theme_editing.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="App.config" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

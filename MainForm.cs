@@ -141,10 +141,7 @@ namespace Five_testing
             {
                 DialogResult result = MessageBox.Show("Внимание! Отменить это действие будет невозможно!", "Удаление Пользователя", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
                 if (result == DialogResult.OK)
-                using (IDbConnection db = new MySqlConnection())
-                    {
-                        db.Execute($"DELETE FROM five_test_debug.test WHERE idtest = {current_test.idtest}");
-                    }
+                SQL_worker.Delete_test(current_test);
                     Refresh_test_list();
             }
         }

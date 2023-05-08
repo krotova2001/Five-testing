@@ -354,5 +354,13 @@ namespace Five_testing
         {
             temp_test.info = richTextBox3.Text;
         }
+
+        //Все вопросы
+        private void button5_Click(object sender, EventArgs e)
+        {
+            Form form = new Editing_univers("questions");
+            form.Show();
+        }
     }
 }
+    

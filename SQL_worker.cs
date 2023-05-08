@@ -59,5 +59,28 @@ namespace Five_testing
                             info = '{t.info}', name = {t.name}' WHERE idtest = {t.idtest})"; 
             db.Execute(query);
         }
+
+        /// <summary>
+        /// Удаление теста из бд
+        /// </summary>
+        /// <param name="t">Экземпляр теста</param>
+        public static void Delete_test(Test t)
+        {
+            db.Execute($"DELETE FROM five_test_debug.test WHERE idtest = {t.idtest}");
+        }
+
+
+        /// <summary>
+        /// Получить список всех вопросов
+        /// </summary>
+        public static List<Question> Get_all_questions()
+        {
+            string query = "SELECT * FROM five_test_debug.questions;";
+            List<Question> q = db.Query<Question>(query).ToList();
+            return q;
+        }
+
+        
+
     }
 }

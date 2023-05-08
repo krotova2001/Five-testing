@@ -23,3 +23,4 @@ C:\Users\zvuk2\Source\Repos\krotova2001\Five-testing\bin\Debug\libmp3lame.64.dll
 C:\Users\zvuk2\Source\Repos\krotova2001\Five-testing\bin\Debug\NAudio.Core.dll
 C:\Users\zvuk2\Source\Repos\krotova2001\Five-testing\bin\Debug\NAudio.Lame.dll
 C:\Users\zvuk2\Source\Repos\krotova2001\Five-testing\bin\Debug\NAudio.Lame.pdb
+C:\Users\zvuk2\Source\Repos\krotova2001\Five-testing\obj\Debug\Five_testing.Editing_univers.resources
