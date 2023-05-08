@@ -32,7 +32,6 @@ namespace Five_testing
         public User user;
         SoundPlayer soundPlayer;
         IDbConnection db;
-        SQL_worker worker;
 
         private void Test_editing_Load(object sender, EventArgs e)
         {
@@ -43,7 +42,6 @@ namespace Five_testing
             all_themas = db.Query<Thema>("SELECT * FROM five_test_debug.question_theme").ToList();
             foreach (Thema thema in all_themas)
                 listBox3.Items.Add(thema);
-            worker = new SQL_worker(user);
             if (temp_test.idtest!=0)
             {
                 textBox1.Text = temp_test.name;

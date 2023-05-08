@@ -32,7 +32,8 @@ namespace Five_testing
         //Сохранить
         private void button1_Click(object sender, EventArgs e)
         {
-            
+            dataGridView1.Update();
+            this.Close();
         }
     }
 }

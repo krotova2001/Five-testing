@@ -18,11 +18,15 @@ namespace Five_testing
         public static User current_user; // текущий пользователь
         static IDbConnection db;
 
-        public SQL_worker(User u)
+        public SQL_worker()
         {
-            current_user = u;
             db = new MySqlConnection(connectionString);
             db.Open();
+        }
+
+        public SQL_worker(User u):this()
+        {
+            current_user = u;
         }
 
         //удаление вопроса из БД по ИД
@@ -43,9 +47,9 @@ namespace Five_testing
         /// <returns>id нового теста</returns>
         public static int Create_new_test(Test t)
         {
-            string query = $@"INSERT INTO five_test_debug.test (info, author_id, name) VALUES ('{t.info}', {current_user.Id}, '{t.info}'); 
-                            SELECT LAST_INSERT_ID();";
-            int res = db.Query<int>(query).First();
+            db = new MySqlConnection(connectionString);
+            string q = $@"INSERT INTO five_test_debug.test (info, author_id, name) VALUES ('{t.info}', {current_user.Id}, '{t.name}'); SELECT LAST_INSERT_ID();";
+            var res = db.Query<int>(q).FirstOrDefault();
             return res;
         }
 
