@@ -141,8 +141,10 @@ namespace Five_testing
             {
                 DialogResult result = MessageBox.Show("Внимание! Отменить это действие будет невозможно!", "Удаление Пользователя", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
                 if (result == DialogResult.OK)
-                SQL_worker.Delete_test(current_test);
-                    Refresh_test_list();
+                {
+                    SQL_worker.Delete_test(current_test);
+                }
+                Refresh_test_list();
             }
         }
 
@@ -156,7 +158,7 @@ namespace Five_testing
         private void button6_Click(object sender, EventArgs e)
         {
             Test t = new Test(current_user);
-            t.idtest = SQL_worker.Create_new_test(t);
+            //t.idtest = SQL_worker.Create_new_test(t);
             Test_editing test_Editing = new Test_editing(t, current_user);
             test_Editing.ShowDialog();
         }

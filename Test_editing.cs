@@ -93,15 +93,14 @@ namespace Five_testing
         private void button1_Click(object sender, EventArgs e)
         {
             if(temp_test.idtest==0) // если это новый тест
+            {
                 temp_test.idtest = SQL_worker.Create_new_test(temp_test); // получение id свежему тесту
+            }
             foreach (Question question in temp_test)
             {
                 if (question.idquestion == 0) //если это новый вопрос
                 {
-                    question.idquestion = db.Query<int>($@"insert into five_test_debug.questions
-                                                    (text, level, id_question_theme, author_id) values 
-                                                    ('{question.text}', {question.level}, {question.theme.idtheme}, {user.Id});
-                                                        SELECT LAST_INSERT_ID();").First();
+                    question.idquestion = SQL_worker.Create_new_question(question);
                     foreach (Answer answer in question)
                     {
                         string insert_query = $@"INSERT INTO five_test_debug.answers (text, question_id)

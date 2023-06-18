@@ -70,7 +70,9 @@ namespace Five_testing
         /// <param name="t">Экземпляр теста</param>
         public static void Delete_test(Test t)
         {
-            db.Execute($"DELETE FROM five_test_debug.test WHERE idtest = {t.idtest}");
+            db = new MySqlConnection(connectionString);
+            string q = $"DELETE FROM five_test_debug.test WHERE idtest = {t.idtest}";
+            db.Execute(q);
         }
 
 
@@ -82,6 +84,18 @@ namespace Five_testing
             string query = "SELECT * FROM five_test_debug.questions;";
             List<Question> q = db.Query<Question>(query).ToList();
             return q;
+        }
+
+        /// <summary>
+        /// Добавление нового вопроса
+        /// </summary>
+        /// <param name="question">Сам вопрос</param>
+        /// <returns>id вопроса</returns>
+        public static int Create_new_question(Question question)
+        {
+            string query = $@"insert into five_test_debug.questions (text, level, id_question_theme, author_id) values('{question.text}', { question.level}, { question.theme.idtheme}, { current_user.Id}); SELECT LAST_INSERT_ID();";
+            int res = db.Query<int>(query).FirstOrDefault();
+            return res;
         }
 
         
