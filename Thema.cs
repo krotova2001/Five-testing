@@ -12,7 +12,7 @@ namespace Five_testing
     public class Thema
     {
         public string Theme { get; set; }
-        public int idtheme { get; set; }
+        public int idtheme { get; set; } = 0;
         public override string ToString()
         {
             return Theme;

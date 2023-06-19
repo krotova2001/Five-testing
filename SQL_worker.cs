@@ -91,9 +91,10 @@ namespace Five_testing
         /// </summary>
         /// <param name="question">Сам вопрос</param>
         /// <returns>id вопроса</returns>
-        public static int Create_new_question(Question question)
+        public static int Create_new_question(Question q)
         {
-            string query = $@"insert into five_test_debug.questions (text, level, id_question_theme, author_id) values('{question.text}', { question.level}, { question.theme.idtheme}, { current_user.Id}); SELECT LAST_INSERT_ID();";
+            db = new MySqlConnection(connectionString);
+            string query = $@"insert into five_test_debug.questions (text, level, id_question_theme, author_id) values('{q.text}', {q.level}, {q.theme.idtheme}, { current_user.Id}); SELECT LAST_INSERT_ID();";
             int res = db.Query<int>(query).FirstOrDefault();
             return res;
         }

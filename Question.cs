@@ -20,7 +20,7 @@ namespace Five_testing
         public string video_ref { get; set; } // ссылка на видео
         public int level { get; set; } = 1;// уровень вопроса
         public Thema theme { get; set; } // тема вопроса
-        public int id_question_theme { get; set; }
+        public int id_question_theme { get; set; } = 0;
         public User author { get; set; } // автор вопроса
         public int author_id { get; set; } = 0;
         public int? correct_answer_id { get; set; }// идентификатор правильного ответа

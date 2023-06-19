@@ -132,9 +132,9 @@ namespace Five_testing
                                             text='{question.text}', 
                                             level={question.level},                                                    
                                             correct_answer_id = {question.correct_answer_id},
-                                            id_question_theme = {question.id_question_theme}
+                                            id_question_theme = {question.theme.idtheme},
                                             WHERE idquestion={question.idquestion}";
-                    db.Execute(update_quest);
+                    db.Execute(update_quest); // ТУТ ОШИБКА!!!
                 }
             }
             Refresh_questions();
@@ -233,11 +233,15 @@ namespace Five_testing
         //галочка - правильный ответ
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
-            temp_answer.is_correct = checkBox1.Checked;
-            if (temp_answer.is_correct)
-                temp_question.correct_answer_id = temp_answer.Idanswers;
-            else
-                temp_question.correct_answer_id = null;
+            if (temp_answer != null)
+            {
+                temp_answer.is_correct = checkBox1.Checked;
+                if (temp_answer.is_correct)
+                    temp_question.correct_answer_id = temp_answer.Idanswers;
+                else
+                    temp_question.correct_answer_id = null;
+            }
+        
         }
 
         //изменение текста ответа
