@@ -103,36 +103,27 @@ namespace Five_testing
                     question.idquestion = SQL_worker.Create_new_question(question);
                     foreach (Answer answer in question)
                     {
-                        string insert_query = $@"INSERT INTO five_test_debug.answers (text, question_id)
-                                                    VALUES ('{answer.Text}', {question.idquestion}) ";
                         if (answer.is_correct)
                         {
-                            question.correct_answer_id = db.Query<int>(insert_query + "; SELECT LAST_INSERT_ID();").FirstOrDefault();
-                            db.Execute($"UPDATE five_test_debug.questions SET correct_answer_id = {question.correct_answer_id} WHERE idquestion = {question.idquestion}");
+                            question.correct_answer_id = SQL_worker.Insert_AnswerInQuestion(answer, question);
+                            SQL_worker.Update_question(question);
                         }
                         else
-                            db.Execute(insert_query);
+                            SQL_worker.Insert_AnswerInQuestion(answer, question);
                     }
-                    db.Execute($"INSERT INTO five_test_debug.test_set (idtest, id_question) VALUES ({temp_test.idtest}, {question.idquestion})");
+                    SQL_worker.Add_QuestionInTest(temp_test, question);
                 }
                 else
                 {
                     //если вопрос уже существует
                     foreach (Answer answer in question)
                     {
-                        string update_ans = $@"UPDATE five_test_debug.answers SET text='{answer.Text}' WHERE idanswers={answer.Idanswers}";
-                        string insert_ans = $@"INSERT INTO five_test_debug.answers (text, question_id)
-                                                    VALUES ('{answer.Text}', {answer.Question_id}) ";
                         if (answer.Idanswers == 0) // если это новый добавленный ответ
-                            answer.Idanswers= db.Query<int>(insert_ans + "; SELECT LAST_INSERT_ID();").First();
+                            answer.Idanswers = SQL_worker.Add_new_answer(answer);
                         else // если существующий
-                            db.Execute(update_ans);
+                            SQL_worker.Update_answer(answer);
                     }
-                    string update_quest = $@"UPDATE five_test_debug.questions SET text='{question.text}', level={question.level}, 
-                                            correct_answer_id = {question.correct_answer_id},
-                                            id_question_theme = {question.theme.idtheme} 
-                                            WHERE idquestion={question.idquestion}";
-                    db.Execute(update_quest); // ТУТ ОШИБКА!!!
+                    SQL_worker.Update_question(question); 
                 }
             }
             Refresh_questions();

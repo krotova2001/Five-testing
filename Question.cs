@@ -23,7 +23,7 @@ namespace Five_testing
         public int id_question_theme { get; set; } = 0;
         public User author { get; set; } // автор вопроса
         public int author_id { get; set; } = 0;
-        public int? correct_answer_id { get; set; }// идентификатор правильного ответа
+        public int? correct_answer_id { get; set; } = 0;// идентификатор правильного ответа
         public List<Answer> Answers { get; set; }// набор ответов
 
         public Question ()

@@ -32,6 +32,7 @@ namespace Five_testing
         //удаление вопроса из БД по ИД
         public static void Delete_question(int id)
         {
+            db = new MySqlConnection(connectionString);
             string del_ans = $"DELETE from five_test_debug.answers where question_id = {id}";
             string del_from_set = $"DELETE FROM five_test_debug.test_set where id_question = {id}";
             string del_ques = $"DELETE FROM five_test_debug.questions where idquestion = {id}";
@@ -59,6 +60,7 @@ namespace Five_testing
         /// <param name="t">Экземпляр теста</param>
         public static void Update_test(Test t)
         {
+            db = new MySqlConnection(connectionString);
             string query = $@"UPDATE five_test_debug.test SET 
                             info = '{t.info}', name = {t.name}' WHERE idtest = {t.idtest})"; 
             db.Execute(query);
@@ -98,6 +100,52 @@ namespace Five_testing
             string query = $@"insert into five_test_debug.questions (text, level, id_question_theme, author_id) values('{q.text}', {q.level}, {q.theme.idtheme}, { current_user.Id}); SELECT LAST_INSERT_ID();";
             int res = db.Query<int>(query).FirstOrDefault();
             return res;
+        }
+
+        /// <summary>
+        /// Создание ответа в заданном вопросе
+        /// </summary>
+        /// <param name="a">Ответ</param>
+        /// <param name="q">Вопрос</param>
+        /// <returns>id ответа</returns>
+        public static int Insert_AnswerInQuestion(Answer a, Question q)
+        {
+            db = new MySqlConnection(connectionString);
+            string query = $@"INSERT INTO five_test_debug.answers (text, question_id) VALUES ('{a.Text}', {q.idquestion}); SELECT LAST_INSERT_ID();";
+            int res = db.Query<int>(query).FirstOrDefault();
+            return res;
+        }
+
+        public static void Update_question(Question q)
+        {
+            db = new MySqlConnection(connectionString);
+            string query = $@"UPDATE five_test_debug.questions SET correct_answer_id = {q.correct_answer_id},
+                                id_question_theme = {q.theme.idtheme},
+                                level = {q.level},
+                                text = '{q.text}'
+                                WHERE idquestion = {q.idquestion} ";
+            db.Query(query);
+        }
+
+        public static void Add_QuestionInTest(Test t,Question q)
+        {
+            db = new MySqlConnection(connectionString);
+            string query = $@"INSERT INTO five_test_debug.test_set (idtest, id_question) VALUES ({t.idtest}, {q.idquestion})";
+            db.Execute(query);
+        }
+
+        public static void Update_answer(Answer a)
+        {
+            db = new MySqlConnection(connectionString);
+            string query = $@"UPDATE five_test_debug.answers SET text='{a.Text}' WHERE idanswers={a.Idanswers}";
+            db.Execute(query);
+        }
+
+        public static int Add_new_answer(Answer a)
+        {
+            db = new MySqlConnection(connectionString);
+            string query = $@"INSERT INTO five_test_debug.answers (text, question_id) VALUES ('{a.Text}', {a.Question_id}); SELECT LAST_INSERT_ID();";
+            return db.Query<int>(query).FirstOrDefault();
         }
 
         
