@@ -128,11 +128,9 @@ namespace Five_testing
                         else // если существующий
                             db.Execute(update_ans);
                     }
-                    string update_quest = $@"UPDATE five_test_debug.questions SET 
-                                            text='{question.text}', 
-                                            level={question.level},                                                    
+                    string update_quest = $@"UPDATE five_test_debug.questions SET text='{question.text}', level={question.level}, 
                                             correct_answer_id = {question.correct_answer_id},
-                                            id_question_theme = {question.theme.idtheme},
+                                            id_question_theme = {question.theme.idtheme} 
                                             WHERE idquestion={question.idquestion}";
                     db.Execute(update_quest); // ТУТ ОШИБКА!!!
                 }

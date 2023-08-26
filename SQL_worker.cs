@@ -81,6 +81,7 @@ namespace Five_testing
         /// </summary>
         public static List<Question> Get_all_questions()
         {
+            db = new MySqlConnection(connectionString);
             string query = "SELECT * FROM five_test_debug.questions;";
             List<Question> q = db.Query<Question>(query).ToList();
             return q;
