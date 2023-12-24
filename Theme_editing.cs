@@ -69,7 +69,7 @@ namespace Five_testing
             using (MySqlConnection db = new MySqlConnection(cs))
             {
                 db.Open();
-                int id_to_del = current_thema.idtheme;
+                int? id_to_del = current_thema.idtheme;
                 MySqlCommand Command = new MySqlCommand($"UPDATE five_test_debug.question_theme SET theme = '{textBox1.Text}' WHERE idtheme = {id_to_del}");
                 Command.Connection = db;
                 Command.ExecuteNonQuery();
@@ -85,7 +85,7 @@ namespace Five_testing
             {
                 if (current_thema != null)
                 {
-                    int id_to_del = current_thema.idtheme;
+                    int? id_to_del = current_thema.idtheme;
                     if (id_to_del != 0)
                     {
                         try

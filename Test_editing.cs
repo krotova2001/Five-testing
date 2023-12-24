@@ -98,6 +98,12 @@ namespace Five_testing
             }
             foreach (Question question in temp_test)
             {
+                if (question.theme == null)
+                {
+                    MessageBox.Show("Необходимо выбрать тему");
+                    return;
+                }
+
                 if (question.idquestion == 0) //если это новый вопрос
                 {
                     question.idquestion = SQL_worker.Create_new_question(question);
@@ -120,6 +126,7 @@ namespace Five_testing
                     //если вопрос уже существует
                     foreach (Answer answer in question)
                     {
+                        answer.Question_id = question.idquestion;
                         string update_ans = $@"UPDATE five_test_debug.answers SET text='{answer.Text}' WHERE idanswers={answer.Idanswers}";
                         string insert_ans = $@"INSERT INTO five_test_debug.answers (text, question_id)
                                                     VALUES ('{answer.Text}', {answer.Question_id}) ";
@@ -132,7 +139,22 @@ namespace Five_testing
                                             correct_answer_id = {question.correct_answer_id},
                                             id_question_theme = {question.theme.idtheme} 
                                             WHERE idquestion={question.idquestion}";
-                    db.Execute(update_quest); // ТУТ ОШИБКА!!!
+                    if (question.correct_answer_id != null)
+                    {
+                        try
+                        {
+                            db.Execute(update_quest); // ТУТ ОШИБКА!!!
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message);
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Необходимо выбрать вариант ответа", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
                 }
             }
             Refresh_questions();
